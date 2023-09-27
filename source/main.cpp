@@ -1,19 +1,15 @@
+#include <iostream>
 #include <string.h>
 #include <stdio.h>
-#include <iostream>
 #include <cmath>
-#include <chrono> // time measurement
+
 #include <vector>
 #include "raylib.h"
 #include "vector3f.h"
 #include "rigidbody.h"
 #include "cuboid.h"
 #include "sphere.h"
-
-#define frand() static_cast <float> (rand()) / static_cast <float> (RAND_MAX)
-typedef std::chrono::high_resolution_clock Clock;
-typedef std::chrono::steady_clock::time_point timestamp;
-#define getTimeDoubleMs(X) std::chrono::duration_cast<std::chrono::microseconds>(X).count() / 1000.0
+#include "utils.h"
 
 // ------------- FUNCTION DEFINITIONS ---------------
 static void update(float& fElapsedTime);
@@ -77,6 +73,7 @@ static void processInput(psim::Vector3f& camVel) {
         
         if (IsWindowFullscreen()) {
             
+            ToggleFullscreen();
             SetWindowSize(screenWidth, screenHeight);
 
         }
@@ -84,9 +81,9 @@ static void processInput(psim::Vector3f& camVel) {
 
             int display = GetCurrentMonitor();
             SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+            ToggleFullscreen();
         }
         
-        ToggleFullscreen();
     }
 }
 
@@ -107,7 +104,7 @@ static void UpdateDrawFrame(void)
     processInput(camVel);
     camVel = camVel.normalize() * frameTime * camSpeed;
     
-    UpdateCameraPro(&camera, camVel, psim::Vector3f{ mouseDelta.x, mouseDelta.y, 0 }, -GetMouseWheelMove());
+    UpdateCameraPro(&camera, camVel, psim::Vector3f{ mouseDelta.x, mouseDelta.y, 0 }, 0);
     SetMousePosition(screenWidth / 2, screenHeight / 2);
 
 
@@ -175,41 +172,8 @@ static void update(float &fElapsedTime) {
 
         for (int j = cnt + 1; j < bodies.size(); j++) {
 
-            
             psim::RigidBody* pObj2 = bodies[j];
-            
-            if (pObj1->checkCollision(*pObj2)) {
-
-                // reslove collision
-
-                psim::Vector3f n = pObj2->getPos() - pObj1->getPos(); // axis on which velocity changes
-                n = n.normalize();
-
-
-                float v1bn = pObj1->getVel() * n.normalize();
-                float v2bn = pObj2->getVel() * n.normalize();
-
-                psim::Vector3f v1a; // new velocity for pBody
-                psim::Vector3f v2a; // new velocity for pOther
-
-                float m1 = pObj1->getMass();
-                float m2 = pObj2->getMass();
-
-                float e = 1;
-
-                float v1an = ( m1 * v1bn + m2 * v2bn + m2 * e * (v2bn - v1bn) ) / ( m1 + m2 );
-                float v2an = ( m1 * v1bn + m2 * v2bn - m2 * e * (v2bn - v1bn) ) / (m1 + m2);
-
-                v1a = n * v1an;
-                v2a = n * v2an;
-
-                pObj1->getVel() = v1a;
-                pObj2->getVel() = v2a;
-
-
-            }
-            else {
-            }
+            pObj1->checkCollision(*pObj2);
 
         }
 
@@ -249,6 +213,16 @@ static void update(float &fElapsedTime) {
     }
 }
 
+float getTotalEnergy() {
+    float energy = 0;
+
+    for (auto& body : bodies) {
+        energy += body->getTotalEnergy();
+    }
+
+    return energy;
+}
+
 static void render() {
     BeginDrawing();
 
@@ -278,6 +252,9 @@ static void render() {
 
         sprintf(buffer, "Simulation Time: %3.2f", simulationTime);
         DrawText(buffer, GetScreenWidth() - 125, 30, 5, BLACK);
+
+        sprintf(buffer, "Energy: %3.2f", getTotalEnergy());
+        DrawText(buffer, GetScreenWidth() - 125, 50, 5, PURPLE);
 
         if (trackBody != nullptr) {
             sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", trackBody->getPos().x, trackBody->getPos().y, trackBody->getPos().z, trackBody->getVel().x, trackBody->getVel().y, trackBody->getVel().z, trackBody->getAcc().x, trackBody->getAcc().y, trackBody->getAcc().z);
@@ -316,6 +293,9 @@ int main(void)
     psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 1, 0}, 1));
     psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
 
+    bodies.push_back(a);
+    bodies.push_back(b);
+
     for (int i = 0; i < 10; i++) {
 
         psim::Vector3f pos {
@@ -329,11 +309,9 @@ int main(void)
         
         bodies.push_back(c);
 
-
     }
 
-    bodies.push_back(a);
-    bodies.push_back(b);
+    for (auto& body : bodies) body->setRestitution(0.7);
 
     while (!WindowShouldClose()) // window close or esc button
     {

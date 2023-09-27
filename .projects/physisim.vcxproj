@@ -288,6 +288,7 @@
     <ClInclude Include="..\source\rigidbody.h" />
     <ClInclude Include="..\source\shape.h" />
     <ClInclude Include="..\source\sphere.h" />
+    <ClInclude Include="..\source\utils.h" />
     <ClInclude Include="..\source\vector3f.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

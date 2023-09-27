@@ -13,7 +13,6 @@ namespace psim {
 	public:
 
 		static bool checkCollision(RigidBody& a, RigidBody& b, Vector3f& normal, float& depth);
-
 		static bool checkSphereSphere(Sphere& a, Sphere& b, Vector3f& normal, float& depth);
 		static bool checkSphereCuboid(Sphere& a, Cuboid& b, Vector3f& normal, float& depth);
 		static bool checkCuboidCuboid(Cuboid& a, Cuboid& b, Vector3f& normal, float& depth);

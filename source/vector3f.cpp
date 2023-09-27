@@ -24,7 +24,7 @@ Vector3f::Vector3f(const Vector3& other) {
 	this->z = other.z;
 }
 
-Vector3f Vector3f::operator+(const Vector3f& other) {
+Vector3f Vector3f::operator+(const Vector3f& other) const {
 	return Vector3f{ 
 		this->x + other.x,
 		this->y + other.y,
@@ -38,7 +38,7 @@ void Vector3f::operator+=(const Vector3f& other) {
 	this->z += other.z;
 }
 
-Vector3f Vector3f::operator-(const Vector3f& other) {
+Vector3f Vector3f::operator-(const Vector3f& other) const {
 	return Vector3f{ 
 		this->x - other.x,
 		this->y - other.y,
@@ -52,13 +52,13 @@ void Vector3f::operator-=(const Vector3f& other) {
 	this->z -= other.z;
 }
 
-float Vector3f::operator*(const Vector3f& other) {
+float Vector3f::operator*(const Vector3f& other) const {
 	return this->x * other.x +
 		this->y * other.y +
 		this->z * other.z;
 }
 
-Vector3f Vector3f::operator*(const float& f) {
+Vector3f Vector3f::operator*(const float& f) const {
 	return Vector3f{
 		this->x * f,
 		this->y * f,
@@ -72,7 +72,7 @@ void Vector3f::operator*=(const float& f) {
 	this->z *= f;
 }
 
-Vector3f Vector3f::operator/(const float& f) {
+Vector3f Vector3f::operator/(const float& f) const {
 	return Vector3f{
 		this->x / f,
 		this->y / f,
@@ -86,7 +86,7 @@ void Vector3f::operator/=(const float& f) {
 	this->z /= f;
 }
 
-Vector3f Vector3f::cross(const Vector3f& other) {
+Vector3f Vector3f::cross(const Vector3f& other) const {
 	return Vector3f{ 
 		this->y * other.z - this->z * other.y,
 		this->z * other.x - this->x * other.z,
@@ -94,11 +94,11 @@ Vector3f Vector3f::cross(const Vector3f& other) {
 	};
 }
 
-float Vector3f::mag() {
+float Vector3f::mag() const {
 	return sqrt(x * x + y * y + z * z);
 }
 
-float Vector3f::mag2() {
+float Vector3f::mag2() const {
 	return x * x + y * y + z * z;
 }
 
@@ -109,7 +109,7 @@ Vector3f& Vector3f::operator=(const Vector3f& other) {
 	return *this;
 }
 
-Vector3f Vector3f::normalize() {
+Vector3f Vector3f::normalize() const {
 	float n = isqrt(x * x + y * y + z * z);
 	
 	Vector3f normal = *this;
@@ -122,7 +122,7 @@ Vector3f Vector3f::normalize() {
 	
 }
 
-float Vector3f::isqrt(float f) {
+float Vector3f::isqrt(float f) const {
 	long i;
 	float x2, y;
 	const float threehalfs = 1.5F;

@@ -19,6 +19,7 @@ namespace psim {
 		Vector3f acc;
 
 		float mass;
+		float restitution;
 
 	public:
 
@@ -26,6 +27,7 @@ namespace psim {
 			this->mass = 1;
 			this->drawVectors = true;
 			this->color = RED;
+			this->restitution = 1;
 		};
 
 		~RigidBody();
@@ -54,6 +56,19 @@ namespace psim {
 		virtual bool checkCollision(RigidBody& other);
 
 		/**
+		 * @brief resolve the collision with other object
+		 * @param other 
+		 * @return 
+		*/
+		virtual void resolveCollision(RigidBody& other, const Vector3f &normal, const float depth);
+
+		/**
+		 * @brief calculate new velocities after collision
+		 * @param other 
+		*/
+		virtual void calculateVelocities(RigidBody& other, const Vector3f &normal);
+
+		/**
 		 * @brief apply force to rigid body
 		 * @param force
 		*/
@@ -65,11 +80,21 @@ namespace psim {
 		*/
 		void addAcceleration(Vector3f acc);
 
+		/**
+		 * @brief calculates the total energy of the object
+		 * @return 
+		*/
+		float getTotalEnergy();
+
 		void showVectors(bool b);
 
 		bool isShowVectors();
 		
 		float getMass();
+
+		float getRestitution();
+
+		void setRestitution(const float r);
 		
 		Shape &getShape() const;
 

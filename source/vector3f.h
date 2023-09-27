@@ -18,7 +18,7 @@ namespace psim {
 		 * @param other
 		 * @return new vector
 		*/
-		Vector3f operator+(const Vector3f& other);
+		Vector3f operator+(const Vector3f& other) const;
 
 		/**
 		* @brief adds two vectors
@@ -32,7 +32,7 @@ namespace psim {
 		 * @param other
 		 * @return new vector
 		*/
-		Vector3f operator-(const Vector3f& other);
+		Vector3f operator-(const Vector3f& other) const;
 
 		/**
 		* @brief subtracts two vectors
@@ -46,14 +46,14 @@ namespace psim {
 		 * @param other
 		 * @return new vector
 		*/
-		float operator*(const Vector3f& other);
+		float operator*(const Vector3f& other) const;
 
 		/**
 		 * @brief multiplies the vector by factor f
 		 * @param f
 		 * @return new vector
 		*/
-		Vector3f operator*(const float& f);
+		Vector3f operator*(const float& f) const;
 
 		/**
 		 * @brief multiplies the vector by factor f
@@ -66,7 +66,7 @@ namespace psim {
 		 * @param f
 		 * @return new vector
 		*/
-		Vector3f operator/(const float& f);
+		Vector3f operator/(const float& f) const;
 
 		/**
 		 * @brief devides the vector by factor f
@@ -79,19 +79,19 @@ namespace psim {
 		 * @param other
 		 * @return new vector
 		*/
-		Vector3f cross(const Vector3f& other);
+		Vector3f cross(const Vector3f& other) const;
 
 		/**
 		 * @brief calculates the magnitude of the vector
 		 * @return 
 		*/
-		float mag();
+		float mag() const;
 
 		/**
 		 * @brief calclutes the square of the magnitude
 		 * @return 
 		*/
-		float mag2();
+		float mag2() const;
 
 		/**
 		 * @brief assignment operator
@@ -104,7 +104,7 @@ namespace psim {
 		 * @brief normalize the vector to unit length
 		 * @return
 		*/
-		Vector3f normalize();
+		Vector3f normalize() const;
 
 
 	private:
@@ -115,7 +115,7 @@ namespace psim {
 		 * @param f 
 		 * @return 
 		*/
-		float isqrt(float f);
+		float isqrt(float f) const;
 
 
 	};

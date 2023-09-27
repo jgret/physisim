@@ -3,12 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physisim", "game\physisim.vcxproj", "{DBDBC540-C7A8-204C-F0C1-0EF4DCED55DA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physisim", ".projects\physisim.vcxproj", "{DBDBC540-C7A8-204C-F0C1-0EF4DCED55DA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8898EA18-743A-15EF-5DF5-284349369C3F} = {8898EA18-743A-15EF-5DF5-284349369C3F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raylib", "_build\raylib.vcxproj", "{8898EA18-743A-15EF-5DF5-284349369C3F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raylib", ".projects\raylib.vcxproj", "{8898EA18-743A-15EF-5DF5-284349369C3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

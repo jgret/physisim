@@ -11,7 +11,7 @@ static const int screenWidth = 800;
 static const int screenHeight = 450;
 
 static Font font = { 0 };
-static psim::Simulation simulation;
+static psim::Simulation *simulation;
 
 int main(void)
 {
@@ -21,11 +21,20 @@ int main(void)
     HideCursor();
 
     font = LoadFont("resources/mecha.png");
-    simulation.init();
+    simulation = new psim::Simulation();
+    simulation->init();
 
     while (!WindowShouldClose()) // window close or esc button
     {
-        simulation.run();
+        simulation->run();
+
+        if (IsKeyPressed(KEY_R))
+        {
+            // restart simulation;
+            delete simulation;
+            simulation = new psim::Simulation();
+            simulation->init();
+        }
     }
 
     UnloadFont(font);

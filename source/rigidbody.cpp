@@ -31,11 +31,9 @@ void psim::RigidBody::update(float fElapsedTime) {
 
 	}
 
-	// s = integral v dt
-	this->pos += this->vel * fElapsedTime;
+	pos += vel * fElapsedTime;
 
-	// v = integral a dt
-	this->vel += this->acc * fElapsedTime;
+	vel += (acc - (vel * damping) ) * fElapsedTime;
 
 }
 
@@ -88,6 +86,16 @@ float psim::RigidBody::getMass() {
 float psim::RigidBody::getRestitution()
 {
 	return this->restitution;
+}
+
+float psim::RigidBody::getDamping()
+{
+	return this->damping;
+}
+
+void psim::RigidBody::setDamping(float d)
+{
+	this->damping = d;
 }
 
 void psim::RigidBody::setRestitution(const float r)

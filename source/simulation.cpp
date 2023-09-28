@@ -9,12 +9,15 @@ static const int screenHeight = 450;
 
 static const float camSense = 0.1f;
 static const float camSpeed = 10.0f;
-static const float maxTimeStep = 0.001f;
+static const float maxTimeStep = 0.05f;
 static const psim::Vector3f GRAVITY{ 0, -9.81f, 0 };
 
 psim::Simulation::Simulation()
 {
+	bPaused = false;
 	trackBody = nullptr;
+	springBody = nullptr;
+	infoBody = nullptr;
 	simulationTime = 0;
 	camera = { 0 };
 	nUpdateCount = 0;
@@ -31,12 +34,27 @@ bool psim::Simulation::init()
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
-	psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
-	psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
-	system.addRigidBody(a);
-	system.addRigidBody(b);
-	a->setRestitution(0.7);
-	b->setRestitution(0.7);
+
+	for (int i = 0; i < 20; i++)
+	{
+		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
+			psim::Vector3f
+			{
+				frand() * 10 - 5,
+				(float) i * 2,
+				frand() * 10 - 5
+			}, frand() * 1 + 1
+		));
+		body->setRestitution(1);
+		system.addRigidBody(body);
+	}
+
+	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
+	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
+	//a->setRestitution(0.7);
+	//b->setRestitution(0.7);
+	//system.addRigidBody(a);
+	//system.addRigidBody(b);
 
 	return true;
 }
@@ -47,8 +65,28 @@ void psim::Simulation::update(float fElapsedTime)
 
 	system.clearForces();
 	system.checkCollision();
+
+	if (trackBody)
+	{
+		trackBody->getPos() = camera.target;
+		trackBody->getVel() = Vector3f::ZERO;
+	}
+
+	if (springBody)
+	{
+		Vector3f diff = (Vector3f{ camera.target } - springBody->getPos());
+		Vector3f dir = diff.normalize();
+
+		float kx = 10;
+
+		Vector3f springForce = diff * kx;
+		springBody->applyForce(springForce);
+
+	}
+
 	system.applyGravity();
 	system.step(fElapsedTime);
+
 
 }
 
@@ -63,6 +101,11 @@ void psim::Simulation::render()
 	for (psim::RigidBody* body : system.getObjects())
 	{
 		body->draw();
+	}
+
+	if (springBody)
+	{
+		DrawLine3D(camera.target, springBody->getPos(), BLACK);
 	}
 
 	DrawGrid(100, 1.0f);
@@ -87,11 +130,14 @@ void psim::Simulation::render()
 	sprintf(buffer, "Energy: %3.2f", system.getTotalEnergy());
 	DrawText(buffer, GetScreenWidth() - 125, 50, 5, PURPLE);
 
-	if (trackBody != nullptr)
+	if (infoBody != nullptr)
 	{
-		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", trackBody->getPos().x, trackBody->getPos().y, trackBody->getPos().z, trackBody->getVel().x, trackBody->getVel().y, trackBody->getVel().z, trackBody->getAcc().x, trackBody->getAcc().y, trackBody->getAcc().z);
+		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z);
 		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
 	}
+
+	if (bPaused)
+		DrawText("PAUSED", GetScreenWidth() / 2 - 50, 10, 10, RED);
 
 	int crosshairSize = 7;
 
@@ -100,9 +146,14 @@ void psim::Simulation::render()
 	EndDrawing();
 }
 
-bool psim::Simulation::pause()
+void psim::Simulation::setPaused(bool b)
 {
-	return false;
+	this->bPaused = b;
+}
+
+bool psim::Simulation::isPaused()
+{
+	return this->bPaused;
 }
 
 bool psim::Simulation::run()
@@ -125,46 +176,36 @@ bool psim::Simulation::run()
 	SetMousePosition(screenWidth / 2, screenHeight / 2);
 
 
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-	{
-
-		psim::RigidBody* body = system.getObjects().at(0);
-
-		body->getPos() = psim::Vector3f{ 0, 10, 0 };
-		body->getVel() = 0;
-		body->getAcc() = 0;
-	}
-
 	timestamp timeInput = Clock::now();
 
-
-	float fPendingTime = frameTime;
-	nUpdateCount = 0;
-	nRequiredUpdateCount = (int)(frameTime / maxTimeStep);
-
-
-	while (fPendingTime > 0)
+	if (!bPaused)
 	{
+		float fPendingTime = frameTime;
+		nUpdateCount = 0;
+		nRequiredUpdateCount = (int)(frameTime / maxTimeStep);
 
-		float fElapsedTime;
-
-		if (fPendingTime > maxTimeStep)
+		while (fPendingTime > 0)
 		{
-			fElapsedTime = maxTimeStep;
+
+			float fElapsedTime;
+
+			if (fPendingTime > maxTimeStep)
+			{
+				fElapsedTime = maxTimeStep;
+			}
+			else
+			{
+				fElapsedTime = fPendingTime;
+			}
+
+			update(fElapsedTime);
+			simulationTime += fElapsedTime;
+			nUpdateCount++;
+
+			fPendingTime -= fElapsedTime;
+
 		}
-		else
-		{
-			fElapsedTime = fPendingTime;
-		}
-
-		update(fElapsedTime);
-		simulationTime += fElapsedTime;
-		nUpdateCount++;
-
-		fPendingTime -= fElapsedTime;
-
 	}
-
 
 	timestamp timeUpdate = Clock::now();
 
@@ -231,12 +272,70 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 		toggleFullScreen();
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+	if (IsKeyPressed(KEY_P))
 	{
-		Ray ray;
-		ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
-		ray.position = psim::Vector3f{ camera.position };
-		trackBody = system.raycastSelect(ray);
+		this->bPaused = !bPaused;
+	}
+
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+	{
+		if (springBody == nullptr)
+		{
+			Ray ray;
+			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
+			ray.position = psim::Vector3f{ camera.position };
+			springBody = system.raycastSelect(ray);
+			if (springBody)
+			{
+				springBody->setColor(RED);
+				springBody->setDamping(SPRING_DAMPING);
+			}
+		}
+		else
+		{
+			springBody->setColor(BLUE);
+			springBody->setDamping(AIR_DAMPING);
+			springBody = nullptr;
+		}
+	} 
+	else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+	{
+
+		if (trackBody == nullptr)
+		{
+			Ray ray;
+			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
+			ray.position = psim::Vector3f{ camera.position };
+			trackBody = system.raycastSelect(ray);
+			if (trackBody)
+				trackBody->setColor(GREEN);
+		}
+		else
+		{
+			trackBody->setColor(BLUE);
+			trackBody = nullptr;
+		}
+ 
+	}
+	else if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
+	{
+
+		if (infoBody == nullptr)
+		{
+			Ray ray;
+			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
+			ray.position = psim::Vector3f{ camera.position };
+			infoBody = system.raycastSelect(ray);
+			if (infoBody)
+				infoBody->setColor(YELLOW);
+		}
+		else
+		{
+			infoBody->setColor(BLUE);
+			infoBody = nullptr;
+		}
+
 	}
 }
 
@@ -244,13 +343,11 @@ void psim::Simulation::toggleFullScreen()
 {
 	if (IsWindowFullscreen())
 	{
-
 		ToggleFullscreen();
 		SetWindowSize(screenWidth, screenHeight);
 	}
 	else
 	{
-
 		int display = GetCurrentMonitor();
 		SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
 		ToggleFullscreen();

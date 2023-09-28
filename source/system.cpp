@@ -105,6 +105,10 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 
 void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f& point, Vector3f& normal)
 {
+
+    if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
+        return;
+
     float v1bn = pObj1->getVel() * normal;
     float v2bn = pObj2->getVel() * normal;
     float m1 = pObj1->getMass();
@@ -142,14 +146,8 @@ RigidBody* psim::System::raycastSelect(Ray &ray)
 
             if (result.hit)
             {
-                body->setColor(GREEN);
                 trackBody = body;
             }
-            else
-            {
-                body->setColor(BLUE);
-            }
-
         }
     }
     return trackBody;

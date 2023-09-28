@@ -2,6 +2,7 @@
 
 #include "vector3f.h"
 #include "shape.h"
+#include "physic_constant.h"
 
 namespace psim {
 
@@ -23,6 +24,7 @@ namespace psim {
 
 		float mass;
 		float restitution;
+		float damping;
 
 	public:
 
@@ -33,6 +35,7 @@ namespace psim {
 			this->drawVectors = true;
 			this->color = RED;
 			this->restitution = 1;
+			this->damping = AIR_DAMPING;
 		};
 
 		~RigidBody();
@@ -89,6 +92,10 @@ namespace psim {
 		float getMass();
 
 		float getRestitution();
+
+		float getDamping();
+
+		void setDamping(float d);
 
 		void setRestitution(const float r);
 		

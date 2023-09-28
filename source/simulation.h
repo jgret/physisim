@@ -13,10 +13,14 @@ namespace psim {
 		System system;
 		Camera3D camera;
 
+		bool bPaused;
 		int nUpdateCount;
 		int nRequiredUpdateCount;
 		double simulationTime;
 		psim::RigidBody* trackBody;
+		psim::RigidBody* infoBody;
+		psim::RigidBody* springBody;
+
 
 	public:
 
@@ -27,7 +31,8 @@ namespace psim {
 		void update(float fElapsedTime);
 		void render();
 
-		bool pause();
+		void setPaused(bool b);
+		bool isPaused();
 
 		bool run();
 

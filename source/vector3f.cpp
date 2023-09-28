@@ -56,6 +56,16 @@ float Vector3f::operator*(const Vector3f& other) const {
 	return this->x * other.x +
 		this->y * other.y +
 		this->z * other.z;
+
+}
+
+Vector3f operator*(const float f, const Vector3f& v)
+{
+	return Vector3f{
+		v.x * f,
+		v.y * f,
+		v.z * f,
+	};
 }
 
 Vector3f Vector3f::operator*(const float& f) const {

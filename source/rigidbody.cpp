@@ -31,7 +31,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 
 	}
 
-	pos += vel * fElapsedTime;
+	pos = fElapsedTime * vel;
 
 	vel += (acc - (vel * damping) ) * fElapsedTime;
 
@@ -40,30 +40,6 @@ void psim::RigidBody::update(float fElapsedTime) {
 void psim::RigidBody::draw() {
 	DrawLine3D(pos, pos + vel, BLUE);
 	this->shape->draw();
-}
-
-void psim::RigidBody::calculateVelocities(RigidBody& other, const Vector3f& n)
-{
-	float v1bn = this->vel * n;
-	float v2bn = other.vel * n;
-
-	psim::Vector3f v1a; // new velocity for pBody
-	psim::Vector3f v2a; // new velocity for pOther
-
-	
-	float m1 = this->mass;
-	float m2 = other.mass;
-
-	float e = std::fminf(this->restitution, other.restitution);
-
-	float v1an = (m1 * v1bn + m2 * v2bn + m2 * e * (v2bn - v1bn)) / (m1 + m2);
-	float v2an = (m1 * v1bn + m2 * v2bn - m2 * e * (v2bn - v1bn)) / (m1 + m2);
-
-	v1a = n * v1an;
-	v2a = n * v2an;
-
-	this->vel = v1a;
-	other.vel = v2a;
 }
 
 void psim::RigidBody::clearForces()

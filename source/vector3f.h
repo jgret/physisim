@@ -120,4 +120,5 @@ namespace psim {
 
 	};
 
+	Vector3f operator*(const float f, const Vector3f& v);
 }

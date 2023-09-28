@@ -5,7 +5,8 @@
 using namespace psim;
 
 void Sphere::draw() {
-	DrawSphere(this->p, this->r, this->color);
+	DrawSphereEx(this->p, this->r, 15, 15, this->color);
+	DrawSphereWires(this->p, this->r, 15, 15, BLACK);
 }
 
 //bool Sphere::checkCollision(RigidBody &other) {

@@ -57,12 +57,6 @@ namespace psim {
 		virtual void draw();
 
 		/**
-		 * @brief calculate new velocities after collision
-		 * @param other 
-		*/
-		virtual void calculateVelocities(RigidBody& other, const Vector3f &normal);
-
-		/**
 		 * @brief clear all forces on object. sets acc to 0
 		*/
 		void clearForces();

@@ -9,7 +9,7 @@ static const int screenHeight = 450;
 
 static const float camSense = 0.1f;
 static const float camSpeed = 10.0f;
-static const float maxTimeStep = 0.05f;
+static const float maxTimeStep = 0.01f;
 static const psim::Vector3f GRAVITY{ 0, -9.81f, 0 };
 
 psim::Simulation::Simulation()
@@ -35,7 +35,7 @@ bool psim::Simulation::init()
 
 	// add objects
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
 			psim::Vector3f
@@ -94,7 +94,7 @@ void psim::Simulation::render()
 {
 	BeginDrawing();
 
-	ClearBackground(LIGHTGRAY);
+	ClearBackground(WHITE);
 
 	BeginMode3D(camera);
 

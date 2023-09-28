@@ -106,20 +106,37 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f& point, Vector3f& normal)
 {
 
-    if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
+	//if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
+	//	return;
+
+	//float v1bn = pObj1->getVel() * normal;
+	//float v2bn = pObj2->getVel() * normal;
+	//float m1 = pObj1->getMass();
+	//float m2 = pObj2->getMass();
+	//float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
+
+	//float v1an = (m1 * v1bn + m2 * v2bn + m2 * e * (v2bn - v1bn)) / (m1 + m2);
+	//float v2an = (m1 * v1bn + m2 * v2bn - m2 * e * (v2bn - v1bn)) / (m1 + m2);
+
+	//pObj1->getVel() = normal * v1an;
+	//pObj2->getVel() = normal * v2an;
+
+    Vector3f relativeVel = pObj2->getVel() - pObj1->getVel();
+
+    if (relativeVel * normal > 0.0f)
         return;
 
-    float v1bn = pObj1->getVel() * normal;
-    float v2bn = pObj2->getVel() * normal;
-    float m1 = pObj1->getMass();
-    float m2 = pObj2->getMass();
-    float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
+	float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
 
-    float v1an = (m1 * v1bn + m2 * v2bn + m2 * e * (v2bn - v1bn)) / (m1 + m2);
-    float v2an = (m1 * v1bn + m2 * v2bn - m2 * e * (v2bn - v1bn)) / (m1 + m2);
+    float j = -(1.0f + e) * (relativeVel * normal);
+    j /= (pObj1->getMass() + pObj2->getMass());
 
-    pObj1->getVel() = normal * v1an;
-    pObj2->getVel() = normal * v2an;
+    Vector3f impulse = normal * j;
+
+
+    pObj1->getVel() -= impulse * pObj1->getMass();
+    pObj2->getVel() += impulse * pObj2->getMass();
+
 }
 
 void psim::System::step(float fElapsedTime)

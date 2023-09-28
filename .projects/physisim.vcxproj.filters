@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Shapes">
       <UniqueIdentifier>{b82adfa7-d30c-479e-9fda-13efa3a6ca34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{a473e3bb-bdac-4810-a08e-904f964214b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\main.cpp">
@@ -48,7 +51,6 @@
     <ClCompile Include="..\source\system.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\world.cpp" />
     <ClCompile Include="..\source\simulation.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -84,12 +86,24 @@
     <ClInclude Include="..\source\physisim.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\world.h" />
     <ClInclude Include="..\source\simulation.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\source\physic_constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\icon.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="physisim.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

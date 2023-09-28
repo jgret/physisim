@@ -282,7 +282,6 @@
     <ClCompile Include="..\source\sphere.cpp" />
     <ClCompile Include="..\source\system.cpp" />
     <ClCompile Include="..\source\vector3f.cpp" />
-    <ClCompile Include="..\source\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\collision.h" />
@@ -297,7 +296,13 @@
     <ClInclude Include="..\source\system.h" />
     <ClInclude Include="..\source\utils.h" />
     <ClInclude Include="..\source\vector3f.h" />
-    <ClInclude Include="..\source\world.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="physisim.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

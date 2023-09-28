@@ -24,8 +24,8 @@ psim::Simulation::Simulation()
 bool psim::Simulation::init()
 {
 	// init camera
-	camera.position = psim::Vector3f{ 0.0f, 5.0f, 10.0f };
-	camera.target = psim::Vector3f{ 0.0f, 0.0f, 0.0f };
+	camera.position = psim::Vector3f{ 0.0f, 5.0f, 15.0f };
+	camera.target = psim::Vector3f{ 0.0f, 4.0f, 0.0f };
 	camera.up = psim::Vector3f{ 0.0f, 1.0f, 0.0f };
 	camera.fovy = 45.0f;
 	camera.projection = CAMERA_PERSPECTIVE;

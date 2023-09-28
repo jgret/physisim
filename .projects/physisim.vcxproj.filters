@@ -7,56 +7,88 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{23e222c4-8a47-4f88-9e35-d88cd1980d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shapes">
+      <UniqueIdentifier>{7b48f920-98ae-4ce2-814b-9dd5d6b2bf74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{6672cad3-23eb-404d-a115-63de9d513cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shapes">
+      <UniqueIdentifier>{b82adfa7-d30c-479e-9fda-13efa3a6ca34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\cuboid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\plane.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\cuboid.cpp">
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\rigidbody.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\plane.cpp">
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="..\source\shape.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="..\source\sphere.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="..\source\vector3f.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\collision.cpp">
+      <Filter>Source Files\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\rigidbody.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\system.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\world.cpp" />
+    <ClCompile Include="..\source\simulation.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\vector3f.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\cuboid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\plane.h">
+    <ClInclude Include="..\source\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\rigidbody.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\vector3f.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\cuboid.h">
+      <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\source\shape.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\source\sphere.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\plane.h">
+      <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\source\collision.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\system.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\physisim.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\utils.h">
+    <ClInclude Include="..\source\world.h" />
+    <ClInclude Include="..\source\simulation.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\physic_constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,6 +9,9 @@ namespace psim {
 	{
 
 	private:
+		static int nextId;
+
+		int id;
 		bool drawVectors;
 		Shape *shape;
 
@@ -24,6 +27,8 @@ namespace psim {
 	public:
 
 		RigidBody(Shape *shape) : shape(shape), pos(shape->getPos()) {
+			this->id = nextId;
+			nextId++;
 			this->mass = 1;
 			this->drawVectors = true;
 			this->color = RED;
@@ -49,24 +54,15 @@ namespace psim {
 		virtual void draw();
 
 		/**
-		 * @brief check if objects overlaps the other
-		 * @param other 
-		 * @return 
-		*/
-		virtual bool checkCollision(RigidBody& other);
-
-		/**
-		 * @brief resolve the collision with other object
-		 * @param other 
-		 * @return 
-		*/
-		virtual void resolveCollision(RigidBody& other, const Vector3f &normal, const float depth);
-
-		/**
 		 * @brief calculate new velocities after collision
 		 * @param other 
 		*/
 		virtual void calculateVelocities(RigidBody& other, const Vector3f &normal);
+
+		/**
+		 * @brief clear all forces on object. sets acc to 0
+		*/
+		void clearForces();
 
 		/**
 		 * @brief apply force to rigid body
@@ -108,6 +104,13 @@ namespace psim {
 
 		void setColor(Color c);
 
-	};
+		int getId();
+
+
+		bool operator==(const RigidBody& other) const
+		{
+			return this->id == other.id;
+		}
+};
 
 }

@@ -4,14 +4,16 @@
 
 static float velEpsilon = 0.0f; // smallest velocity. Objects with less velocity are considered "at rest"
 
+int psim::RigidBody::nextId = 0;
+
 psim::RigidBody::~RigidBody()
 {
 	delete this->shape;
 }
 
 void psim::RigidBody::init() {
-	this->acc = psim::Vector3f{ 0, 0, 0 };
-	this->vel = psim::Vector3f{ 0, 0, 0 };
+	this->acc = psim::Vector3f::ZERO;
+	this->vel = psim::Vector3f::ZERO;
 }
 
 void psim::RigidBody::update(float fElapsedTime) {
@@ -29,42 +31,17 @@ void psim::RigidBody::update(float fElapsedTime) {
 
 	}
 
-	// v = integral a dt
-	this->vel += this->acc * fElapsedTime;
-
 	// s = integral v dt
 	this->pos += this->vel * fElapsedTime;
 
+	// v = integral a dt
+	this->vel += this->acc * fElapsedTime;
+
 }
-
-bool psim::RigidBody::checkCollision(RigidBody& other) {
-
-	bool collision = false;
-	Vector3f normal;
-	float depth;
-
-	if (Collision::checkCollision(*this, other, normal, depth)) {
-
-		this->resolveCollision(other, normal, depth);
-		this->calculateVelocities(other, normal);
-		collision = true;
-	}
-
-	return collision;
-}
-
 
 void psim::RigidBody::draw() {
 	DrawLine3D(pos, pos + vel, BLUE);
 	this->shape->draw();
-}
-
-void psim::RigidBody::resolveCollision(RigidBody& other, const Vector3f& normal, const float depth)
-{
-	Vector3f move = normal * depth / 2;
-
-	this->getPos() += move;
-	other.getPos() -= move;
 }
 
 void psim::RigidBody::calculateVelocities(RigidBody& other, const Vector3f& n)
@@ -89,6 +66,11 @@ void psim::RigidBody::calculateVelocities(RigidBody& other, const Vector3f& n)
 
 	this->vel = v1a;
 	other.vel = v2a;
+}
+
+void psim::RigidBody::clearForces()
+{
+	acc = Vector3f::ZERO;
 }
 
 void psim::RigidBody::applyForce(psim::Vector3f force) {
@@ -151,5 +133,10 @@ bool psim::RigidBody::isShowVectors() {
 void psim::RigidBody::setColor(Color c) {
 	this->color = c;
 	this->shape->setColor(c);
+}
+
+int psim::RigidBody::getId()
+{
+	return this->id;
 }
 

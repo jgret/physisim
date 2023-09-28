@@ -2,7 +2,7 @@
 
 using namespace psim;
 
-bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& normal, float& depth)
+bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& contactPoint, Vector3f& normal, float& depth)
 {
 
 	switch (a.getShapeType()) {
@@ -12,7 +12,7 @@ bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& norma
 		switch (b.getShapeType()) {
 
 		case SPHERE:
-			return checkSphereSphere((Sphere&) a.getShape(), (Sphere&) b.getShape(), normal, depth);
+			return checkShperes((Sphere&) a.getShape(), (Sphere&) b.getShape(), contactPoint, normal, depth);
 
 		}
 
@@ -24,7 +24,7 @@ bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& norma
 	return false;
 }
 
-bool Collision::checkSphereSphere(Sphere &a, Sphere &b, Vector3f &normal, float &depth) {
+bool Collision::checkShperes(Sphere &a, Sphere &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
 
 	bool collision = false;
 	normal = Vector3f::ZERO;
@@ -55,7 +55,7 @@ bool Collision::checkSphereSphere(Sphere &a, Sphere &b, Vector3f &normal, float 
 	return collision;
 }
 
-bool Collision::checkSphereCuboid(Sphere &a, Cuboid &b, Vector3f &normal, float &depth) {
+bool Collision::checkSphereCuboid(Sphere &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
 
 	bool collision = false;
 
@@ -63,7 +63,7 @@ bool Collision::checkSphereCuboid(Sphere &a, Cuboid &b, Vector3f &normal, float 
 	return collision;
 }
 
-bool Collision::checkCuboidCuboid(Cuboid &a, Cuboid &b, Vector3f &normal, float &depth) {
+bool Collision::checkCuboids(Cuboid &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
 
 	bool collision = false;
 

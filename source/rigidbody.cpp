@@ -31,7 +31,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 
 	}
 
-	pos = fElapsedTime * vel;
+	pos += vel * fElapsedTime;
 
 	vel += (acc - (vel * damping) ) * fElapsedTime;
 

@@ -121,7 +121,8 @@ Vector3f& Vector3f::operator=(const Vector3f& other) {
 
 Vector3f Vector3f::normalize() const {
 	float n = isqrt(x * x + y * y + z * z);
-	
+	// float n = 1.0f / std::sqrtf(this->mag2());
+
 	Vector3f normal = *this;
 
 	normal.x *= n;

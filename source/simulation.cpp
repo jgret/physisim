@@ -9,7 +9,7 @@ static const int screenHeight = 450;
 
 static const float camSense = 0.1f;
 static const float camSpeed = 10.0f;
-static const float maxTimeStep = 0.01f;
+static const float maxTimeStep = 0.001f;
 static const psim::Vector3f GRAVITY{ 0, -9.81f, 0 };
 
 psim::Simulation::Simulation()

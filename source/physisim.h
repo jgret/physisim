@@ -1,5 +1,6 @@
 #pragma once
 // core
+#include "psim_core.h"
 #include "vector3f.h"
 #include "simulation.h"
 #include "system.h"

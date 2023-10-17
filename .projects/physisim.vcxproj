@@ -97,43 +97,43 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Debug\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
@@ -159,7 +159,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -178,7 +178,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -196,7 +196,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -218,7 +218,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -241,7 +241,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -264,7 +264,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>raylib.lib;winmm.lib;kernel32.lib;opengl32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\build\raylib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\build\raylib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>

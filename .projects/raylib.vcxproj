@@ -95,38 +95,38 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\build\raylib\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\raylib</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\build\raylib\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\raylib</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <OutDir>..\build\raylib\</OutDir>
-    <IntDir>..\build\obj\x64\Debug\raylib</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\_bin\Release\</OutDir>
-    <IntDir>obj\x64\Release\raylib\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\_bin\Release\</OutDir>
-    <IntDir>obj\x86\Release\raylib\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <OutDir>..\_bin\Release\</OutDir>
-    <IntDir>obj\ARM64\Release\raylib\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\raylib</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\raylib</IntDir>
     <TargetName>raylib</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

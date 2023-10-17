@@ -2,8 +2,6 @@
 #include "rigidbody.h"
 #include "collision.h"
 
-static float velEpsilon = 0.0f; // smallest velocity. Objects with less velocity are considered "at rest"
-
 int psim::RigidBody::nextId = 0;
 
 psim::RigidBody::~RigidBody()
@@ -38,7 +36,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 }
 
 void psim::RigidBody::draw() {
-	DrawLine3D(pos, pos + vel, BLUE);
+	DrawLine3D(pos, pos + vel * 10, BLUE);
 	this->shape->draw();
 }
 

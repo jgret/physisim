@@ -1,6 +1,7 @@
 #include "vector3f.h"
 #include <iostream>
 #include <cmath>
+#include <raymath.h>
 
 using namespace psim;
 
@@ -105,7 +106,7 @@ Vector3f Vector3f::cross(const Vector3f& other) const {
 }
 
 float Vector3f::mag() const {
-	return sqrt(x * x + y * y + z * z);
+	return std::sqrt(x * x + y * y + z * z);
 }
 
 float Vector3f::mag2() const {
@@ -120,31 +121,37 @@ Vector3f& Vector3f::operator=(const Vector3f& other) {
 }
 
 Vector3f Vector3f::normalize() const {
-	float n = isqrt(x * x + y * y + z * z);
-	// float n = 1.0f / std::sqrtf(this->mag2());
 
-	Vector3f normal = *this;
+	float len = mag();
+	if (len != 0.0f)
+	{
+		float n = 1.0f / len;
 
-	normal.x *= n;
-	normal.y *= n;
-	normal.z *= n;
+		Vector3f normal = *this;
+
+		normal.x *= n;
+		normal.y *= n;
+		normal.z *= n;
 	
-	return normal;
+		return normal;
+	}
+	else
+	{
+		return Vector3f::ZERO;
+	}
 	
 }
 
-float Vector3f::isqrt(float f) const {
-	long i;
-	float x2, y;
-	const float threehalfs = 1.5F;
+float psim::Vector3f::angle(const Vector3f& other)
+{
+	float dotproduct;
+	float cos_angle;
+	float angle;
 
-	x2 = f * 0.5F;
-	y = f;
-	i = *(long*)&y;                       // evil floating point bit level hacking
-	i = 0x5f3759df - (i >> 1);               // what the fuck?
-	y = *(float*)&i;
-	y = y * (threehalfs - (x2 * y * y));   // 1st iteration
-	// y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
-
-	return y;
+	// cos(a) = (a.b) / |a|*|b|  
+	dotproduct = (*this) * other;
+	cos_angle = dotproduct / (this->mag() * other.mag());
+	
+	angle = acosf(cos_angle);
+	return angle;
 }

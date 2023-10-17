@@ -106,17 +106,12 @@ namespace psim {
 		*/
 		Vector3f normalize() const;
 
-
-	private:
 		/**
-		 * @brief fast inverse square root implementation from Quake III Arena.
-		 * uses evil bit hack
-		 * 
-		 * @param f 
+		 * @brief calculate the angle between this vector and the other
+		 * @param other 
 		 * @return 
 		*/
-		float isqrt(float f) const;
-
+		float angle(const Vector3f& other);
 
 	};
 

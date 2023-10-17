@@ -2,6 +2,7 @@
 #include "simulation.h"
 #include "utils.h"
 #include "sphere.h"
+#include "raymath.h"
 
 // ------------- CONSTANTS --------------------------
 static const int screenWidth = 800;
@@ -11,6 +12,9 @@ static const float camSense = 0.1f;
 static const float camSpeed = 10.0f;
 static const float maxTimeStep = 0.001f;
 static const psim::Vector3f GRAVITY{ 0, -9.81f, 0 };
+
+static Model model1;
+static psim::Vector3f rotation{0, 0, 0};
 
 psim::Simulation::Simulation()
 {
@@ -34,8 +38,9 @@ bool psim::Simulation::init()
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
+	static const int object_count = 20;
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
 			psim::Vector3f
@@ -45,7 +50,7 @@ bool psim::Simulation::init()
 				frand() * 10 - 5
 			}, frand() * 1 + 1
 		));
-		body->setRestitution(1);
+		body->setRestitution(0.9);
 		system.addRigidBody(body);
 	}
 
@@ -56,104 +61,11 @@ bool psim::Simulation::init()
 	//system.addRigidBody(a);
 	//system.addRigidBody(b);
 
+
+	Mesh cube1 = GenMeshCube(1, 1, 1);
+	model1 = LoadModelFromMesh(cube1);
+
 	return true;
-}
-
-
-void psim::Simulation::update(float fElapsedTime)
-{
-
-	system.clearForces();
-	system.checkCollision();
-
-	if (trackBody)
-	{
-		trackBody->getPos() = camera.target;
-		trackBody->getVel() = Vector3f::ZERO;
-	}
-
-	if (springBody)
-	{
-		Vector3f diff = (Vector3f{ camera.target } - springBody->getPos());
-		Vector3f dir = diff.normalize();
-
-		float kx = 10;
-
-		Vector3f springForce = diff * kx;
-		springBody->applyForce(springForce);
-
-	}
-
-	system.applyGravity();
-	system.step(fElapsedTime);
-
-
-}
-
-void psim::Simulation::render()
-{
-	BeginDrawing();
-
-	ClearBackground(WHITE);
-
-	BeginMode3D(camera);
-
-	for (psim::RigidBody* body : system.getObjects())
-	{
-		body->draw();
-	}
-
-	if (springBody)
-	{
-		DrawLine3D(camera.target, springBody->getPos(), BLACK);
-	}
-
-	DrawGrid(100, 1.0f);
-
-	EndMode3D();
-
-
-	DrawFPS(10, 10);
-
-	char buffer[400 + 1];
-	sprintf(buffer, "Camera\nx = %.2f y = %.2f z = %.2f\nTarget\nx = %.2f y = %.2f z = %.2f",
-		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z);
-	DrawText(buffer, 10, 30, 5, BLACK);
-
-	sprintf(buffer, "Update Count: %03d / %03d", nUpdateCount, nRequiredUpdateCount);
-	DrawText(buffer, GetScreenWidth() - 125, 10, 5, RED);
-
-	sprintf(buffer, "Simulation Time: %3.2f", simulationTime);
-	DrawText(buffer, GetScreenWidth() - 125, 30, 5, BLACK);
-
-	sprintf(buffer, "Energy: %3.2f", system.getTotalEnergy());
-	DrawText(buffer, GetScreenWidth() - 125, 50, 5, PURPLE);
-
-	if (infoBody != nullptr)
-	{
-		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z);
-		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
-	}
-
-	if (bPaused)
-		DrawText("PAUSED", GetScreenWidth() / 2 - 50, 10, 10, RED);
-
-	int crosshairSize = 7;
-
-	DrawRectangle(GetScreenWidth() / 2 - crosshairSize / 2, GetScreenHeight() / 2 - crosshairSize / 2, crosshairSize, crosshairSize, BLACK);
-
-	EndDrawing();
-}
-
-void psim::Simulation::setPaused(bool b)
-{
-	this->bPaused = b;
-}
-
-bool psim::Simulation::isPaused()
-{
-	return this->bPaused;
 }
 
 bool psim::Simulation::run()
@@ -216,12 +128,12 @@ bool psim::Simulation::run()
 	double timeTaken = getTimeDoubleMs(timeUpdate - timeInput);
 	double timeTakenAvg = nUpdateCount == 0 ? timeTaken : timeTaken / nUpdateCount;
 
-	//std::cout << "Timings" << std::endl;
-	//std::cout << " Input: " << std::fixed << getTimeDoubleMs(timeInput - timeStart) << "ms" << std::endl;
-	//std::cout << "Update: " << std::fixed << timeTaken << "ms" << std::endl;
-	//std::cout << "   avg: " << std::fixed << timeTakenAvg << "ms" << std::endl;
-	//std::cout << "Render: " << std::fixed << getTimeDoubleMs(timeRender - timeUpdate) << "ms" << std::endl;
-	//std::cout << std::endl;
+	std::cout << "Timings" << std::endl;
+	std::cout << " Input: " << std::fixed << getTimeDoubleMs(timeInput - timeStart) << "ms" << std::endl;
+	std::cout << "Update: " << std::fixed << timeTaken << "ms" << std::endl;
+	std::cout << "   avg: " << std::fixed << timeTakenAvg << "ms" << std::endl;
+	std::cout << "Render: " << std::fixed << getTimeDoubleMs(timeRender - timeUpdate) << "ms" << std::endl;
+	std::cout << std::endl;
 
 	return true;
 }
@@ -282,7 +194,7 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 	{
 		if (springBody == nullptr)
 		{
-			Ray ray;
+			Ray ray{ 0 };
 			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
 			ray.position = psim::Vector3f{ camera.position };
 			springBody = system.raycastSelect(ray);
@@ -304,7 +216,7 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 
 		if (trackBody == nullptr)
 		{
-			Ray ray;
+			Ray ray{ 0 };
 			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
 			ray.position = psim::Vector3f{ camera.position };
 			trackBody = system.raycastSelect(ray);
@@ -323,7 +235,7 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 
 		if (infoBody == nullptr)
 		{
-			Ray ray;
+			Ray ray{ 0 };
 			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
 			ray.position = psim::Vector3f{ camera.position };
 			infoBody = system.raycastSelect(ray);
@@ -338,6 +250,110 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 
 	}
 }
+
+void psim::Simulation::update(float fElapsedTime)
+{
+
+	system.clearForces();
+	system.checkCollision();
+
+	if (trackBody)
+	{
+		trackBody->getPos() = camera.target;
+		trackBody->getVel() = Vector3f::ZERO;
+	}
+
+	if (springBody)
+	{
+		Vector3f diff = (Vector3f{ camera.target } - springBody->getPos());
+		Vector3f dir = diff.normalize();
+
+		float kx = 10;
+
+		Vector3f springForce = diff * kx;
+		springBody->applyForce(springForce);
+
+	}
+
+	system.applyGravity();
+	system.step(fElapsedTime);
+
+
+}
+
+void psim::Simulation::render()
+{
+	BeginDrawing();
+
+	ClearBackground(WHITE);
+
+	BeginMode3D(camera);
+
+		for (psim::RigidBody* body : system.getObjects())
+		{
+			body->draw();
+		}
+
+		if (springBody)
+		{
+			DrawLine3D(camera.target, springBody->getPos(), BLACK);
+		}
+
+		rotation.x += 0.01;
+		rotation.y += 0.02;
+		model1.transform = MatrixRotateXYZ(rotation);
+
+		DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
+		DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
+
+		DrawGrid(100, 1.0f);
+
+	EndMode3D();
+
+	DrawFPS(10, 10);
+
+	char buffer[400 + 1];
+	sprintf(buffer, "Camera\nx = %.2f y = %.2f z = %.2f\nTarget\nx = %.2f y = %.2f z = %.2f",
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z);
+	DrawText(buffer, 10, 30, 5, BLACK);
+
+	sprintf(buffer, "Update Count: %03d / %03d", nUpdateCount, nRequiredUpdateCount);
+	DrawText(buffer, GetScreenWidth() - 125, 10, 5, RED);
+
+	sprintf(buffer, "Simulation Time: %3.2f", simulationTime);
+	DrawText(buffer, GetScreenWidth() - 125, 30, 5, BLACK);
+
+	sprintf(buffer, "Energy: %3.2f", system.getTotalEnergy());
+	DrawText(buffer, GetScreenWidth() - 125, 50, 5, PURPLE);
+
+	if (infoBody != nullptr)
+	{
+		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z);
+		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
+	}
+
+	if (bPaused)
+		DrawText("PAUSED", GetScreenWidth() / 2 - 50, 10, 10, RED);
+
+	int crosshairSize = 7;
+
+	DrawRectangle(GetScreenWidth() / 2 - crosshairSize / 2, GetScreenHeight() / 2 - crosshairSize / 2, crosshairSize, crosshairSize, BLACK);
+
+	EndDrawing();
+}
+
+void psim::Simulation::setPaused(bool b)
+{
+	this->bPaused = b;
+}
+
+bool psim::Simulation::isPaused()
+{
+	return this->bPaused;
+}
+
+
 
 void psim::Simulation::toggleFullScreen()
 {

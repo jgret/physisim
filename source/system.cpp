@@ -1,4 +1,5 @@
 #include "physisim.h"
+#include <cassert>
 
 using namespace psim;
 
@@ -21,14 +22,15 @@ psim::RigidBody* System::removeRigidBodyById(int search)
 {
     int idx = 0;
     psim::RigidBody* ret = nullptr;
-    
+
     // search for index
-    while ((objects[idx]->getId() != search) && (idx < objects.size())) 
+    while ((objects[idx]->getId() != search) && (idx < objects.size()))
     {
         idx++;
     }
 
-    if (idx < objects.size()) {
+    if (idx < objects.size())
+    {
 
         // store address
         ret = objects.at(idx);
@@ -106,14 +108,14 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f& point, Vector3f& normal)
 {
 
-	if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
-		return;
+    if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
+        return;
 
     normal = normal.normalize();
 
     // calculate the velocity along the distance vector
-    psim::Vector3f velocityBefore1n = normal * pObj1->getVel().cross(normal).mag();
-    psim::Vector3f velocityBefore2n = normal * pObj2->getVel().cross(normal).mag();
+    psim::Vector3f velocityBefore1n = (pObj1->getVel() * normal) * normal;
+    psim::Vector3f velocityBefore2n = (pObj2->getVel() * normal) * normal;
 
     // calculate the normal components to the velocity
     psim::Vector3f normalComponents1 = pObj1->getVel() - velocityBefore1n;
@@ -133,22 +135,6 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 
 	pObj1->getVel() = velocityAfter1n + normalComponents1;
 	pObj2->getVel() = velocityAfter2n + normalComponents2;
-
- //   Vector3f relativeVel = pObj2->getVel() - pObj1->getVel();
-
- //   if (relativeVel * normal > 0.0f)
- //       return;
-
-	//float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
-
- //   float j = -(1.0f + e) * (relativeVel * normal);
- //   j /= (pObj1->getMass() + pObj2->getMass());
-
- //   Vector3f impulse = normal * j;
-
-
- //   pObj1->getVel() -= impulse * pObj1->getMass();
- //   pObj2->getVel() += impulse * pObj2->getMass();
 
 }
 

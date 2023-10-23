@@ -39,8 +39,7 @@ bool psim::Simulation::init()
 
 	// add objects
 	static const int object_count = 20;
-
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < object_count; i++)
 	{
 		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
 			psim::Vector3f
@@ -50,9 +49,19 @@ bool psim::Simulation::init()
 				frand() * 10 - 5
 			}, frand() * 1 + 1
 		));
-		body->setRestitution(0.9);
+		body->setRestitution(0.7);
 		system.addRigidBody(body);
 	}
+
+	psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 1, 0}, 1));
+	psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{-5, 1, 0}, 1));
+	system.addRigidBody(a);
+	system.addRigidBody(b);
+	a->setRestitution(0.7);
+	b->setRestitution(0.7);
+
+
+	b->getVel() = psim::Vector3f(1, 0, 0);
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
@@ -299,12 +308,12 @@ void psim::Simulation::render()
 			DrawLine3D(camera.target, springBody->getPos(), BLACK);
 		}
 
-		rotation.x += 0.01;
-		rotation.y += 0.02;
-		model1.transform = MatrixRotateXYZ(rotation);
+		//rotation.x += 0.01;
+		//rotation.y += 0.02;
+		//model1.transform = MatrixRotateXYZ(rotation);
 
-		DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
-		DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
+		//DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
+	    //DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
 
 		DrawGrid(100, 1.0f);
 

@@ -10,7 +10,9 @@ namespace psim {
 		Vector3f normal;
 		Vector3f a;
 		Vector3f b;
-
+	
 	};
+
+
 
 }

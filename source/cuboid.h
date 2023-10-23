@@ -17,6 +17,7 @@ namespace psim {
 		};
 
 		void draw();
+		float getVolume();
 		bool checkCollision(RigidBody& other);
 		void onCollision();
 

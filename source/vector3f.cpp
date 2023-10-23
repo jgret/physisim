@@ -155,3 +155,12 @@ float psim::Vector3f::angle(const Vector3f& other)
 	angle = acosf(cos_angle);
 	return angle;
 }
+
+Vector3f psim::operator*(const float f, const Vector3f& v)
+{
+	return Vector3f{
+		v.x * f,
+		v.y * f,
+		v.z * f
+	};
+}

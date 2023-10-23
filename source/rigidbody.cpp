@@ -36,7 +36,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 }
 
 void psim::RigidBody::draw() {
-	DrawLine3D(pos, pos + vel * 10, BLUE);
+	DrawLine3D(pos, pos + vel, BLUE);
 	this->shape->draw();
 }
 

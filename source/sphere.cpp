@@ -5,8 +5,14 @@
 using namespace psim;
 
 void Sphere::draw() {
-	DrawSphereEx(this->p, this->r, 15, 15, this->color);
-	DrawSphereWires(this->p, this->r, 15, 15, BLACK);
+	const int rings = 14, slices = 14;
+	DrawSphereEx(this->p, this->r, rings, slices, this->color);
+	DrawSphereWires(this->p, this->r, rings, slices, BLACK);
+}
+
+float psim::Sphere::getVolume()
+{
+	return r * r * PI;
 }
 
 //bool Sphere::checkCollision(RigidBody &other) {

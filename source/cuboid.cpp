@@ -6,6 +6,11 @@ void psim::Cuboid::draw() {
 	DrawCubeWiresV(center, dim, MAROON);
 }
 
+float psim::Cuboid::getVolume()
+{
+	return dim.x * dim.y * dim.z;
+}
+
 void psim::Cuboid::onCollision() {
 	
 }

@@ -39,6 +39,7 @@ namespace psim {
 		}
 
 		virtual void draw() = 0;
+		virtual float getVolume() = 0;
 
 	};
 

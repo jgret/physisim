@@ -10,11 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "physisim", ".projects\physi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raylib", ".projects\raylib.vcxproj", "{8898EA18-743A-15EF-5DF5-284349369C3F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "test\TestProject\TestProject.vcxproj", "{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8898EA18-743A-15EF-5DF5-284349369C3F} = {8898EA18-743A-15EF-5DF5-284349369C3F}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -49,18 +44,6 @@ Global
 		{8898EA18-743A-15EF-5DF5-284349369C3F}.Release|Win32.Build.0 = Release|Win32
 		{8898EA18-743A-15EF-5DF5-284349369C3F}.Release|x64.ActiveCfg = Release|x64
 		{8898EA18-743A-15EF-5DF5-284349369C3F}.Release|x64.Build.0 = Release|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|ARM64.ActiveCfg = Debug|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|ARM64.Build.0 = Debug|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|Win32.Build.0 = Debug|Win32
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|x64.ActiveCfg = Debug|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Debug|x64.Build.0 = Debug|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|ARM64.ActiveCfg = Release|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|ARM64.Build.0 = Release|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|Win32.ActiveCfg = Release|Win32
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|Win32.Build.0 = Release|Win32
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|x64.ActiveCfg = Release|x64
-		{1DBD55B2-67C5-4C0B-9759-56E71F62A3F8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

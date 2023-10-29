@@ -43,6 +43,7 @@ namespace psim {
 		psim::Vector3f getCameraDirection(const Camera& cam) const;
 		float getDistanceCameraToBody(const Camera& cam, psim::RigidBody& body);
 		void toggleFullScreen();
+		void takeScreenshot();
 
 	};
 

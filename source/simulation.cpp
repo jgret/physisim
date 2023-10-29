@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include "simulation.h"
 #include "utils.h"
 #include "sphere.h"
@@ -203,6 +205,11 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 
 	}
 
+	if (IsKeyPressed(KEY_F1))
+	{
+		takeScreenshot();
+	}
+
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
@@ -361,24 +368,29 @@ void psim::Simulation::render()
 
 	char buffer[400 + 1];
 
-	sprintf(buffer, "Camera\nx = %.2f y = %.2f z = %.2f\nTarget\nx = %.2f y = %.2f z = %.2f",
+	DrawText(TextFormat("Camera\nx = %.2f y = %.2f z = %.2f\nTarget\nx = %.2f y = %.2f z = %.2f",
 		camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z);
-	DrawText(buffer, 10, 30, 5, BLACK);
+		camera.target.x, camera.target.y, camera.target.z), 10, 30, 5, BLACK);
 
-	sprintf(buffer, "Update Count: %03d / %03d", nUpdateCount, nRequiredUpdateCount);
-	DrawText(buffer, GetScreenWidth() - 125, 10, 5, RED);
-
-	sprintf(buffer, "Simulation Time: %3.2f", simulationTime);
-	DrawText(buffer, GetScreenWidth() - 125, 30, 5, BLACK);
-
-	sprintf(buffer, "Energy: %3.2f", system.getTotalEnergy());
-	DrawText(buffer, GetScreenWidth() - 125, 50, 5, PURPLE);
+	//DrawText(TextFormat("Update Count: %03d / %03d", nUpdateCount, nRequiredUpdateCount), GetScreenWidth() - 125, 10, 5, RED);
+	DrawText(TextFormat("Simulation Time: %3.2f", simulationTime), GetScreenWidth() - 125, 30, 5, BLACK);
+	DrawText(TextFormat("Energy: %3.2f", system.getTotalEnergy()), GetScreenWidth() - 125, 50, 5, PURPLE);
 
 	if (infoBody != nullptr)
 	{
-		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\nmass: %2.2f\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z, infoBody->getMass());
-		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
+
+		Vector3f& pos = infoBody->getPos();
+		Vector3f& vel = infoBody->getVel();
+		Vector3f& acc = infoBody->getAcc();
+		float mass = infoBody->getMass();
+
+		const char* text = TextFormat("RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\nmass: %2.2f\n",
+			pos.x, pos.y, pos.z,
+			vel.x, vel.y, vel.z,
+			acc.x, acc.y, acc.z,
+			mass
+		);
+		DrawText(text, GetScreenWidth() - 200, 50, 3, BLACK);
 	}
 
 	if (paused)
@@ -414,4 +426,21 @@ void psim::Simulation::toggleFullScreen()
 		SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
 		ToggleFullscreen();
 	}
+}
+
+void psim::Simulation::takeScreenshot()
+{
+	std::string folderPath = GetWorkingDirectory();
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
+	auto str = oss.str();
+	std::string filename = "screenshot_" + str;
+	
+	std::string absolutePath = folderPath + "\\" + filename + ".png";
+	std::cout << "Screenshot saved to " << absolutePath << std::endl;
+	
+	TakeScreenshot(filename.c_str());
 }

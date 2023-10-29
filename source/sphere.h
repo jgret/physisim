@@ -11,7 +11,7 @@ namespace psim {
 		float r;	// radius
 
 	public:
-		Sphere(Vector3f pos = 0, float r = 0) : Shape(ShapeType::SPHERE, BLUE), r(r)
+		Sphere(float r = 0) : Shape(ShapeType::SPHERE, BLUE), r(r)
 		{
 		};
 

@@ -13,10 +13,12 @@ namespace psim {
 		System system;
 		Camera3D camera;
 
-		bool bPaused;
+		bool paused;
 		int nUpdateCount;
 		int nRequiredUpdateCount;
 		double simulationTime;
+		float trackBodyDistance;			// distance to hold body at when dragging around
+		psim::Vector3f trackBodyOffset;
 		psim::RigidBody* trackBody;
 		psim::RigidBody* infoBody;
 		psim::RigidBody* springBody;
@@ -38,6 +40,8 @@ namespace psim {
 
 	private:
 		void processInput(psim::Vector3f& camVel);
+		psim::Vector3f getCameraDirection(const Camera& cam) const;
+		float getDistanceCameraToBody(const Camera& cam, psim::RigidBody& body);
 		void toggleFullScreen();
 
 	};

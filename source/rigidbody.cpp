@@ -9,7 +9,7 @@ psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0
 {
 };
 
-psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) : shape(shape)
+psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) : pos(position), shape(shape)
 {
 	this->id = nextId;
 	nextId++;

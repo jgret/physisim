@@ -116,4 +116,12 @@ namespace psim {
 	};
 
 	Vector3f operator*(const float f, const Vector3f& v);
+
+
 }
+
+// extra operators for compatibility with raylib's vector3
+
+psim::Vector3f operator+(const Vector3& a, const Vector3& b);
+
+psim::Vector3f operator-(const Vector3& a, const Vector3& b);

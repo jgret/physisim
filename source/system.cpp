@@ -119,7 +119,7 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 
     // calculate the normal components to the velocity
     psim::Vector3f normalComponents1 = pObj1->getVel() - velocityBefore1n;
-    psim::Vector3f normalComponents2 = pObj1->getVel() - velocityBefore2n;
+    psim::Vector3f normalComponents2 = pObj2->getVel() - velocityBefore2n;
 
 	float v1bn = velocityBefore1n.mag();
 	float v2bn = velocityBefore2n.mag();
@@ -127,11 +127,11 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 	float m2 = pObj2->getMass();
 	float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
 
-	float v1an = (m1 * v1bn + m2 * v2bn + m2 * e * (v2bn - v1bn)) / (m1 + m2);
-	float v2an = (m1 * v1bn + m2 * v2bn - m2 * e * (v2bn - v1bn)) / (m1 + m2);
+	float v1an = (m1 * v1bn + m2 * v2bn + ( m2 * e * (v2bn - v1bn))) / (m1 + m2);
+	float v2an = (m1 * v1bn + m2 * v2bn - ( m2 * e * (v2bn - v1bn))) / (m1 + m2);
 
     psim::Vector3f velocityAfter1n = normal * v1an;
-    psim::Vector3f velocityAfter2n = normal * v2an;
+    psim::Vector3f velocityAfter2n = (-1) * normal * v2an;
 
 	pObj1->getVel() = velocityAfter1n + normalComponents1;
 	pObj2->getVel() = velocityAfter2n + normalComponents2;
@@ -148,6 +148,12 @@ void psim::System::step(float fElapsedTime)
 
 RigidBody* psim::System::raycastSelect(Ray &ray)
 {
+    Vector3f p;
+    return raycastSelect(ray, p);
+}
+
+RigidBody* psim::System::raycastSelect(Ray& ray, Vector3f& contactPoint)
+{
 
     RigidBody* trackBody = nullptr;
 
@@ -163,6 +169,7 @@ RigidBody* psim::System::raycastSelect(Ray &ray)
             if (result.hit)
             {
                 trackBody = body;
+                contactPoint = Vector3f{ result.point };
             }
         }
     }

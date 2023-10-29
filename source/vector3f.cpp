@@ -164,3 +164,15 @@ Vector3f psim::operator*(const float f, const Vector3f& v)
 		v.z * f
 	};
 }
+
+// extra operators for compatibility with raylib's vector3
+
+Vector3f operator+(const Vector3& a, const Vector3& b)
+{
+	return Vector3f{ a.x + b.x, a.y + b.y, a.z + b.z };
+}
+
+Vector3f operator-(const Vector3& a, const Vector3& b)
+{
+	return Vector3f{ a.x - b.x, a.y - b.y, a.z - b.z };
+}

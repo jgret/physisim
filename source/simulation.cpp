@@ -18,11 +18,13 @@ static psim::Vector3f rotation{0, 0, 0};
 
 psim::Simulation::Simulation()
 {
-	bPaused = false;
+	paused = false;
 	trackBody = nullptr;
 	springBody = nullptr;
 	infoBody = nullptr;
 	simulationTime = 0;
+	trackBodyDistance = 0; 
+	trackBodyOffset = Vector3f::ZERO;
 	camera = { 0 };
 	nUpdateCount = 0;
 	nRequiredUpdateCount = 0;
@@ -48,8 +50,8 @@ bool psim::Simulation::init()
 		system.addRigidBody(body);
 	}
 
-	psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 1, 0}, 1));
-	psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{-5, 1, 0}, 1));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -2, 10, 0}, new psim::Sphere(5));
+	psim::RigidBody* b = new psim::RigidBody(Vector3f{ 0, 1, 0 }, new psim::Sphere(1));
 	system.addRigidBody(a);
 	system.addRigidBody(b);
 	a->setRestitution(0.7);
@@ -86,12 +88,13 @@ bool psim::Simulation::run()
 	camVel = camVel.normalize() * frameTime * camSpeed;
 
 	UpdateCameraPro(&camera, camVel, psim::Vector3f{ mouseDelta.x, mouseDelta.y, 0 }, 0);
-	SetMousePosition(screenWidth / 2, screenHeight / 2);
+
+	SetMousePosition(GetScreenWidth() / 2, GetScreenHeight() / 2);
 
 
 	timestamp timeInput = Clock::now();
 
-	if (!bPaused)
+	if (!paused)
 	{
 		float fPendingTime = frameTime;
 		nUpdateCount = 0;
@@ -129,12 +132,12 @@ bool psim::Simulation::run()
 	double timeTaken = getTimeDoubleMs(timeUpdate - timeInput);
 	double timeTakenAvg = nUpdateCount == 0 ? timeTaken : timeTaken / nUpdateCount;
 
-	std::cout << "Timings" << std::endl;
-	std::cout << " Input: " << std::fixed << getTimeDoubleMs(timeInput - timeStart) << "ms" << std::endl;
-	std::cout << "Update: " << std::fixed << timeTaken << "ms" << std::endl;
-	std::cout << "   avg: " << std::fixed << timeTakenAvg << "ms" << std::endl;
-	std::cout << "Render: " << std::fixed << getTimeDoubleMs(timeRender - timeUpdate) << "ms" << std::endl;
-	std::cout << std::endl;
+	//std::cout << "Timings" << std::endl;
+	//std::cout << " Input: " << std::fixed << getTimeDoubleMs(timeInput - timeStart) << "ms" << std::endl;
+	//std::cout << "Update: " << std::fixed << timeTaken << "ms" << std::endl;
+	//std::cout << "   avg: " << std::fixed << timeTakenAvg << "ms" << std::endl;
+	//std::cout << "Render: " << std::fixed << getTimeDoubleMs(timeRender - timeUpdate) << "ms" << std::endl;
+	//std::cout << std::endl;
 
 	return true;
 }
@@ -187,7 +190,17 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 
 	if (IsKeyPressed(KEY_P))
 	{
-		this->bPaused = !bPaused;
+		this->paused = !paused;
+		
+		//if (paused)
+		//{
+		//	ShowCursor();
+		//}
+		//else
+		//{
+		//	HideCursor();
+		//}
+
 	}
 
 
@@ -219,10 +232,15 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 		{
 			Ray ray{ 0 };
 			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
-			ray.position = psim::Vector3f{ camera.position };
-			trackBody = system.raycastSelect(ray);
+			ray.position = camera.position;
+			Vector3f contactPoint;
+			trackBody = system.raycastSelect(ray, contactPoint);
 			if (trackBody)
+			{
+				trackBodyDistance = Vector3f{ camera.position - contactPoint }.mag();
+				trackBodyOffset = trackBody->getPos() - contactPoint;
 				trackBody->setColor(GREEN);
+			}
 		}
 		else
 		{
@@ -237,8 +255,9 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 		if (infoBody == nullptr)
 		{
 			Ray ray{ 0 };
-			ray.direction = (psim::Vector3f{camera.target} - psim::Vector3f{camera.position}).normalize();
-			ray.position = psim::Vector3f{ camera.position };
+			
+			ray.direction = Vector3Normalize(camera.target - camera.position);
+			ray.position = camera.position;
 			infoBody = system.raycastSelect(ray);
 			if (infoBody)
 				infoBody->setColor(YELLOW);
@@ -250,6 +269,25 @@ void psim::Simulation::processInput(psim::Vector3f& camVel)
 		}
 
 	}
+
+	if (trackBody)
+	{
+		trackBodyDistance += GetMouseWheelMove();
+		if (trackBodyDistance < 1.0f)
+		{
+			trackBodyDistance = 1.0f;
+		}
+	}
+}
+
+psim::Vector3f psim::Simulation::getCameraDirection(const Camera& cam) const
+{
+	return Vector3f{ cam.target - cam.position }.normalize();
+}
+
+float psim::Simulation::getDistanceCameraToBody(const Camera& cam, psim::RigidBody& body)
+{
+	return (body.getPos() - Vector3f{cam.position}).mag();
 }
 
 void psim::Simulation::update(float fElapsedTime)
@@ -260,7 +298,7 @@ void psim::Simulation::update(float fElapsedTime)
 
 	if (trackBody)
 	{
-		trackBody->getPos() = camera.target;
+		trackBody->getPos() = Vector3f{ camera.position } + ( getCameraDirection(camera) * trackBodyDistance ) + trackBodyOffset;
 		trackBody->getVel() = Vector3f::ZERO;
 	}
 
@@ -300,12 +338,20 @@ void psim::Simulation::render()
 			DrawLine3D(camera.target, springBody->getPos(), BLACK);
 		}
 
+		if (trackBody)
+		{
+			Vector3f center = trackBody->getPos();
+			center.y = 0;
+			DrawCircle3D(center, 0.25f, Vector3f{ 1, 0, 0 }, 90, MAGENTA);
+			DrawLine3D(trackBody->getPos(), center, LIGHTGRAY);
+		}
+
 		rotation.x += 0.01;
 		rotation.y += 0.02;
 		model1.transform = MatrixRotateXYZ(rotation);
 
-		DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
-	    DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
+		//DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
+	    //DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
 
 		DrawGrid(100, 1.0f);
 
@@ -335,7 +381,7 @@ void psim::Simulation::render()
 		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
 	}
 
-	if (bPaused)
+	if (paused)
 		DrawText("PAUSED", GetScreenWidth() / 2 - 50, 10, 10, RED);
 
 	int crosshairSize = 7;
@@ -347,12 +393,12 @@ void psim::Simulation::render()
 
 void psim::Simulation::setPaused(bool b)
 {
-	this->bPaused = b;
+	this->paused = b;
 }
 
 bool psim::Simulation::isPaused()
 {
-	return this->bPaused;
+	return this->paused;
 }
 
 void psim::Simulation::toggleFullScreen()

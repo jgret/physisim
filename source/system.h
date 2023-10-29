@@ -28,6 +28,7 @@ namespace psim {
 		void step(float time);
 
 		RigidBody* raycastSelect(Ray &ray);
+		RigidBody* raycastSelect(Ray& ray, Vector3f &contactPoint);
 
 		float getTotalEnergy();
 

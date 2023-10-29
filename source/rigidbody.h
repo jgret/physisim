@@ -31,7 +31,7 @@ namespace psim {
 
 		RigidBody(Shape *shape);
 
-		RigidBody(const Vector3f &position, Shape *shape, const float density, const float restitution, const Color &color,  bool drawVectors);
+		RigidBody(const Vector3f &position, Shape *shape, const float density = 1, const float restitution = DEFAULT_RESTITIUTION, const Color &color = RED,  bool drawVectors = true);
 
 		~RigidBody();
 

@@ -8,20 +8,18 @@ namespace psim {
 	class Sphere : public Shape {
 
 	private:
-		Vector3f p; // center
 		float r;	// radius
 
 	public:
-		Sphere(Vector3f pos = 0, float r = 0) : Shape(ShapeType::SPHERE, BLUE), p(pos), r(r)
+		Sphere(Vector3f pos = 0, float r = 0) : Shape(ShapeType::SPHERE, BLUE), r(r)
 		{
 		};
 
-		void draw();
-		float getVolume();
+		virtual void draw(const Vector3f& pos) const;
+		float getVolume() const;
 		void onCollision();
 
-		Vector3f &getPos();
-		float getRadius();
+		float getRadius() const;
 
 	};
 

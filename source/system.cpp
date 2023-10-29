@@ -158,7 +158,7 @@ RigidBody* psim::System::raycastSelect(Ray &ray)
         {
             psim::Sphere& s = (psim::Sphere&)body->getShape();
 
-            RayCollision result = GetRayCollisionSphere(ray, s.getPos(), s.getRadius());
+            RayCollision result = GetRayCollisionSphere(ray, body->getPos(), s.getRadius());
 
             if (result.hit)
             {

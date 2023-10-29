@@ -12,7 +12,7 @@ bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& conta
 		switch (b.getShapeType()) {
 
 		case SPHERE:
-			return checkShperes((Sphere&) a.getShape(), (Sphere&) b.getShape(), contactPoint, normal, depth);
+			return checkShperes(a.getPos(), static_cast<Sphere&>(a.getShape()), b.getPos(), static_cast<Sphere&>(b.getShape()), contactPoint, normal, depth);
 
 		}
 
@@ -24,7 +24,7 @@ bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& conta
 	return false;
 }
 
-bool Collision::checkShperes(Sphere &a, Sphere &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
+bool Collision::checkShperes(const Vector3f &posA, const Sphere &a, const Vector3f& posB, const Sphere &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
 
 	bool collision = false;
 	normal = Vector3f::ZERO;
@@ -40,7 +40,7 @@ bool Collision::checkShperes(Sphere &a, Sphere &b, Vector3f& contactPoint, Vecto
 	* call is needed
 	*/
 
-	Vector3f c = a.getPos() - b.getPos();
+	Vector3f c = posA - posB;
 	float distance = c.mag2();
 
 	float radii = a.getRadius() + b.getRadius();
@@ -55,18 +55,18 @@ bool Collision::checkShperes(Sphere &a, Sphere &b, Vector3f& contactPoint, Vecto
 	return collision;
 }
 
-bool Collision::checkSphereCuboid(Sphere &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
-
-	bool collision = false;
-
-
-	return collision;
-}
-
-bool Collision::checkCuboids(Cuboid &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
-
-	bool collision = false;
-
-
-	return collision;
-}
+//bool Collision::checkSphereCuboid(Sphere &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
+//
+//	bool collision = false;
+//
+//
+//	return collision;
+//}
+//
+//bool Collision::checkCuboids(Cuboid &a, Cuboid &b, Vector3f& contactPoint, Vector3f &normal, float &depth) {
+//
+//	bool collision = false;
+//
+//
+//	return collision;
+//}

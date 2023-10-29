@@ -97,43 +97,43 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\physisim</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)\physisim</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)physisim\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\$(PlatformShortName)physisim\</IntDir>
     <TargetName>physisim</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>

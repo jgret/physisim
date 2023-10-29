@@ -38,16 +38,11 @@ bool psim::Simulation::init()
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
-	static const int object_count = 20;
+	static const int object_count = 0;
 	for (int i = 0; i < object_count; i++)
 	{
 		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
-			psim::Vector3f
-			{
-				frand() * 10 - 5,
-				(float) i * 2,
-				frand() * 10 - 5
-			}, frand() * 1 + 1
+			frand() * 1 + 1
 		));
 		body->setRestitution(0.7);
 		system.addRigidBody(body);
@@ -59,9 +54,6 @@ bool psim::Simulation::init()
 	system.addRigidBody(b);
 	a->setRestitution(0.7);
 	b->setRestitution(0.7);
-
-
-	b->getVel() = psim::Vector3f(1, 0, 0);
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
@@ -277,7 +269,7 @@ void psim::Simulation::update(float fElapsedTime)
 		Vector3f diff = (Vector3f{ camera.target } - springBody->getPos());
 		Vector3f dir = diff.normalize();
 
-		float kx = 10;
+		float kx = 50;
 
 		Vector3f springForce = diff * kx;
 		springBody->applyForce(springForce);
@@ -308,12 +300,12 @@ void psim::Simulation::render()
 			DrawLine3D(camera.target, springBody->getPos(), BLACK);
 		}
 
-		//rotation.x += 0.01;
-		//rotation.y += 0.02;
-		//model1.transform = MatrixRotateXYZ(rotation);
+		rotation.x += 0.01;
+		rotation.y += 0.02;
+		model1.transform = MatrixRotateXYZ(rotation);
 
-		//DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
-	    //DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
+		DrawModel(model1, psim::Vector3f{1, 1, 1}, 3, GREEN);
+	    DrawModelWires(model1, psim::Vector3f{1, 1, 1}, 3, BLACK);
 
 		DrawGrid(100, 1.0f);
 
@@ -322,6 +314,7 @@ void psim::Simulation::render()
 	DrawFPS(10, 10);
 
 	char buffer[400 + 1];
+
 	sprintf(buffer, "Camera\nx = %.2f y = %.2f z = %.2f\nTarget\nx = %.2f y = %.2f z = %.2f",
 		camera.position.x, camera.position.y, camera.position.z,
 		camera.target.x, camera.target.y, camera.target.z);
@@ -338,7 +331,7 @@ void psim::Simulation::render()
 
 	if (infoBody != nullptr)
 	{
-		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z);
+		sprintf(buffer, "RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\nmass: %2.2f\n", infoBody->getPos().x, infoBody->getPos().y, infoBody->getPos().z, infoBody->getVel().x, infoBody->getVel().y, infoBody->getVel().z, infoBody->getAcc().x, infoBody->getAcc().y, infoBody->getAcc().z, infoBody->getMass());
 		DrawText(buffer, GetScreenWidth() - 200, 50, 3, BLACK);
 	}
 
@@ -361,8 +354,6 @@ bool psim::Simulation::isPaused()
 {
 	return this->bPaused;
 }
-
-
 
 void psim::Simulation::toggleFullScreen()
 {

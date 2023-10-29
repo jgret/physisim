@@ -18,13 +18,14 @@ namespace psim {
 		
 	protected:
 		Color color;
-
+		
 
 	public:
 
 		Shape(ShapeType type, Color color) : type(type), color(color) {}
-
-		virtual Vector3f &getPos() = 0;
+		
+		virtual void draw(const Vector3f &pos) const = 0;
+		virtual float getVolume() const = 0;
 
 		ShapeType getType() {
 			return this->type;
@@ -38,8 +39,6 @@ namespace psim {
 			this->color = c;
 		}
 
-		virtual void draw() = 0;
-		virtual float getVolume() = 0;
 
 	};
 

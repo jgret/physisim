@@ -1,8 +1,31 @@
 #include <cmath>
+#include <iostream>
 #include "rigidbody.h"
 #include "collision.h"
 
 int psim::RigidBody::nextId = 0;
+
+psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0.7, RED, true)
+{
+};
+
+psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) : shape(shape)
+{
+	this->id = nextId;
+	nextId++;
+	this->drawVectors = true;
+	this->color = RED;
+	this->restitution = restitution;
+	this->damping = AIR_DAMPING;
+	this->density = density;
+	this->mass = shape->getVolume() * this->density;
+
+	if (mass == 0) // don't allow zero mass
+	{
+		std::cout << "RigidBody has zero mass" << std::endl;
+		mass = 1;
+	}
+}
 
 psim::RigidBody::~RigidBody()
 {
@@ -37,7 +60,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 
 void psim::RigidBody::draw() {
 	DrawLine3D(pos, pos + vel, BLUE);
-	this->shape->draw();
+	this->shape->draw(pos);
 }
 
 void psim::RigidBody::clearForces()
@@ -101,7 +124,7 @@ psim::ShapeType psim::RigidBody::getShapeType() const {
 float psim::RigidBody::getTotalEnergy()
 {
 	// Ekin + Epot
-	return this->mass * this->vel.mag2() * 0.5f + this->mass * 9.81 * this->pos.y;
+	return this->mass * this->vel.mag2() * 0.5f + this->mass * 9.81f * this->pos.y;
 }
 
 void psim::RigidBody::showVectors(bool b) {

@@ -4,13 +4,14 @@
 
 using namespace psim;
 
-void Sphere::draw() {
+void Sphere::draw(const Vector3f& pos) const
+{
 	const int rings = 14, slices = 14;
-	DrawSphereEx(this->p, this->r, rings, slices, this->color);
-	DrawSphereWires(this->p, this->r, rings, slices, BLACK);
+	DrawSphereEx(pos, this->r, rings, slices, this->color);
+	DrawSphereWires(pos, this->r, rings, slices, BLACK);
 }
 
-float psim::Sphere::getVolume()
+float psim::Sphere::getVolume() const
 {
 	return r * r * PI;
 }
@@ -44,15 +45,12 @@ float psim::Sphere::getVolume()
 //	return collision;
 //}
 
-void Sphere::onCollision() {
-	
-}
-
-Vector3f& psim::Sphere::getPos()
+void Sphere::onCollision()
 {
-	return this->p;
+
 }
 
-float Sphere::getRadius() {
+float Sphere::getRadius() const
+{
 	return this->r;
 }

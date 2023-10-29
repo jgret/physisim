@@ -18,25 +18,20 @@ namespace psim {
 
 	protected:
 		Color color;
-		Vector3f &pos;
+		Vector3f pos;
 		Vector3f vel;
 		Vector3f acc;
 
 		float mass;
+		float density;
 		float restitution;
 		float damping;
 
 	public:
 
-		RigidBody(Shape *shape) : shape(shape), pos(shape->getPos()) {
-			this->id = nextId;
-			nextId++;
-			this->mass = 1;
-			this->drawVectors = true;
-			this->color = RED;
-			this->restitution = 1;
-			this->damping = AIR_DAMPING;
-		};
+		RigidBody(Shape *shape);
+
+		RigidBody(const Vector3f &position, Shape *shape, const float density, const float restitution, const Color &color,  bool drawVectors);
 
 		~RigidBody();
 

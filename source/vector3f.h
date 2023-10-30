@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include <iostream>
 
 namespace psim {
 
@@ -112,6 +113,8 @@ namespace psim {
 		 * @return 
 		*/
 		float angle(const Vector3f& other);
+
+		std::string toString();
 
 	};
 

@@ -40,7 +40,7 @@ bool Collision::checkShperes(const Vector3f &posA, const Sphere &a, const Vector
 	* call is needed
 	*/
 
-	Vector3f c = posA - posB;
+	Vector3f c = posB - posA;
 	float distance = c.mag2();
 
 	float radii = a.getRadius() + b.getRadius();

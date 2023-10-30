@@ -24,7 +24,6 @@ int main(void)
     simulation = new psim::Simulation();
     simulation->init();
 
-
     while (!WindowShouldClose()) // window close or esc button
     {
         simulation->run();

@@ -9,15 +9,11 @@ psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0
 {
 };
 
-psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) : pos(position), shape(shape)
+psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) 
+	: pos(position), shape(shape), momentum(0), density(density), restitution(restitution), color(color), drawVectors(drawVectors)
 {
-	this->id = nextId;
-	nextId++;
-	this->drawVectors = true;
-	this->color = RED;
-	this->restitution = restitution;
+	this->id = nextId++;
 	this->damping = AIR_DAMPING;
-	this->density = density;
 	this->mass = shape->getVolume() * this->density;
 
 	if (mass == 0) // don't allow zero mass
@@ -55,6 +51,8 @@ void psim::RigidBody::update(float fElapsedTime) {
 	pos += vel * fElapsedTime;
 
 	vel += (acc - (vel * damping) ) * fElapsedTime;
+
+	momentum = mass * vel;
 
 }
 
@@ -115,6 +113,11 @@ psim::Vector3f& psim::RigidBody::getVel() {
 
 psim::Vector3f& psim::RigidBody::getAcc() {
 	return this->acc;
+}
+
+const psim::Vector3f& psim::RigidBody::getMomentum()
+{
+	return this->momentum;
 }
 
 psim::ShapeType psim::RigidBody::getShapeType() const {

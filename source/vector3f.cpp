@@ -1,7 +1,9 @@
 #include "vector3f.h"
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <raymath.h>
+#include <sstream>
 
 using namespace psim;
 
@@ -144,6 +146,13 @@ Vector3f Vector3f::normalize() const {
 
 float psim::Vector3f::angle(const Vector3f& other)
 {
+
+	float len1 = this->mag();
+	float len2 = other.mag();
+
+	if (len1 == 0 || len2 == 0)
+		return 0;
+
 	float dotproduct;
 	float cos_angle;
 	float angle;
@@ -151,9 +160,34 @@ float psim::Vector3f::angle(const Vector3f& other)
 	// cos(a) = (a.b) / |a|*|b|  
 	dotproduct = (*this) * other;
 	cos_angle = dotproduct / (this->mag() * other.mag());
-	
+
+
+
 	angle = acosf(cos_angle);
 	return angle;
+}
+
+//class sign_padding :public std::num_put<char>
+//{
+//public:
+//	// only for float and double
+//	iter_type do_put(iter_type s, std::ios_base& f,
+//		char_type fill, double v) const
+//	{
+//		if (std::signbit(v) == false)
+//			*s++ = ' ';
+//		return std::num_put<char>::do_put(s, f, fill, v);
+//	}
+//};
+
+std::string psim::Vector3f::toString()
+{
+	std::ostringstream oss;
+	//oss.imbue(std::locale(oss.getloc(), new sign_padding));
+	//oss << std::setfill('0') << std::setw(10);
+	oss << "{ " << x << ", " << y << ", " << z << " }";
+
+	return oss.str();
 }
 
 Vector3f psim::operator*(const float f, const Vector3f& v)

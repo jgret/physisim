@@ -89,6 +89,7 @@ void psim::System::checkCollision()
             {
                 resolveCollision(pObj1, pObj2, normal, depth);
                 calculateImpulse(pObj1, pObj2, point, normal);
+
             }
 
         }
@@ -101,15 +102,32 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 {
     Vector3f move = normal * depth / 2;
 
-    pObj1->getPos() += move;
-    pObj2->getPos() -= move;
+    pObj1->getPos() -= move;
+    pObj2->getPos() += move;
+
+    //const float kNormalForce = 100;
+    //if (depth > 0)
+    //{
+    //    // ! normal vetor always points from pObj1 to pObj2 !
+    //    Vector3f normalForce{ 0 };
+    //    normalForce = kNormalForce * depth * normal;
+
+    //    pObj1->applyForce(-1 * normalForce * pObj1->getMass());
+    //    pObj2->applyForce(normalForce * pObj2->getMass());
+
+    //}
+
 }
 
 void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f& point, Vector3f& normal)
 {
 
-    if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
-        return;
+    const float velThreshold = 0.0;
+
+    float pBefore = (pObj1->getMomentum() + pObj2->getMomentum()).mag();
+
+    //if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
+    //    return;
 
     normal = normal.normalize();
 
@@ -121,20 +139,57 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
     psim::Vector3f normalComponents1 = pObj1->getVel() - velocityBefore1n;
     psim::Vector3f normalComponents2 = pObj2->getVel() - velocityBefore2n;
 
-	float v1bn = velocityBefore1n.mag();
-	float v2bn = velocityBefore2n.mag();
+
+
+	//float v1bn = velocityBefore1n.mag();
+	//float v2bn = velocityBefore2n.mag();
+
+    float v1bn;
+    if (velocityBefore1n * normal > 0)
+    {
+        v1bn = velocityBefore1n.mag();
+    }
+    else
+    {
+        v1bn = -velocityBefore1n.mag();
+    }
+
+    float v2bn;
+    if (velocityBefore2n * normal > 0)
+    {
+        v2bn = velocityBefore2n.mag();
+    }
+    else
+    {
+        v2bn = -velocityBefore2n.mag();
+    }
+
+    if (std::abs(v1bn) < velThreshold)
+        v1bn = 0;
+    if (std::abs(v2bn) < velThreshold)
+        v2bn = 0;
 	float m1 = pObj1->getMass();
 	float m2 = pObj2->getMass();
+    float p1 = m1 * v1bn;
+    float p2 = m2 * v2bn;
 	float e = std::fminf(pObj1->getRestitution(), pObj2->getRestitution());
 
-	float v1an = (m1 * v1bn + m2 * v2bn + ( m2 * e * (v2bn - v1bn))) / (m1 + m2);
-	float v2an = (m1 * v1bn + m2 * v2bn - ( m2 * e * (v2bn - v1bn))) / (m1 + m2);
+	float v1an = ((p1 + p2) + ( m2 * e * (v2bn - v1bn))) / (m1 + m2);
+	float v2an = ((p1 + p2) - ( m1 * e * (v2bn - v1bn))) / (m1 + m2);
 
     psim::Vector3f velocityAfter1n = normal * v1an;
-    psim::Vector3f velocityAfter2n = (-1) * normal * v2an;
+    psim::Vector3f velocityAfter2n = normal * v2an;
 
 	pObj1->getVel() = velocityAfter1n + normalComponents1;
 	pObj2->getVel() = velocityAfter2n + normalComponents2;
+
+    float pAfter = (pObj1->getMomentum() + pObj2->getMomentum()).mag();
+
+    float pAbsDiff = std::abs(pBefore - pAfter);
+    if (pAbsDiff > std::numeric_limits<float>::epsilon())
+    {
+        std::cout << "Momentum lost in collsion: " << pBefore << " -> " << pAfter << " (" << pAbsDiff << ")" << std::endl;
+    }
 
 }
 

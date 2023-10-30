@@ -35,29 +35,37 @@ psim::Simulation::Simulation()
 bool psim::Simulation::init()
 {
 	// init camera
-	camera.position = psim::Vector3f{ 0.0f, 5.0f, 15.0f };
+	camera.position = psim::Vector3f{ 0.0f, 10.0f, 25.0f };
 	camera.target = psim::Vector3f{ 0.0f, 4.0f, 0.0f };
 	camera.up = psim::Vector3f{ 0.0f, 1.0f, 0.0f };
 	camera.fovy = 45.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
-	static const int object_count = 0;
-	for (int i = 0; i < object_count; i++)
+	static const int object_count = 4;
+	for (int k = 0; k < 3; k++)
 	{
-		psim::RigidBody* body = new psim::RigidBody(new psim::Sphere(
-			frand() * 1 + 1
-		));
-		body->setRestitution(0.7);
-		system.addRigidBody(body);
+		for (int j = 0; j < 3; j++)
+		{
+			for (int i = 0; i < object_count; i++)
+			{
+				float r = 1;
+				psim::RigidBody* body = new psim::RigidBody(
+					Vector3f{j * 2 * r, i * 2 * r + r, k * 2 * r},
+					new psim::Sphere(r)
+				);
+				body->setRestitution(0);
+				system.addRigidBody(body);
+			}
+		}
 	}
 
-	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -2, 10, 0}, new psim::Sphere(5));
-	psim::RigidBody* b = new psim::RigidBody(Vector3f{ 0, 1, 0 }, new psim::Sphere(1));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 5, 0}, new psim::Sphere(5));
+	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1));
 	system.addRigidBody(a);
 	system.addRigidBody(b);
-	a->setRestitution(0.7);
-	b->setRestitution(0.7);
+	//a->setRestitution(1);
+	//b->setRestitution(1);
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
@@ -75,6 +83,9 @@ bool psim::Simulation::init()
 
 bool psim::Simulation::run()
 {
+
+	//std::cout << Vector3f{camera.position}.toString() << std::endl;
+
 	float frameTime = GetFrameTime();
 
 	timestamp timeStart = Clock::now();
@@ -92,7 +103,6 @@ bool psim::Simulation::run()
 	UpdateCameraPro(&camera, camVel, psim::Vector3f{ mouseDelta.x, mouseDelta.y, 0 }, 0);
 
 	SetMousePosition(GetScreenWidth() / 2, GetScreenHeight() / 2);
-
 
 	timestamp timeInput = Clock::now();
 
@@ -314,9 +324,9 @@ void psim::Simulation::update(float fElapsedTime)
 		Vector3f diff = (Vector3f{ camera.target } - springBody->getPos());
 		Vector3f dir = diff.normalize();
 
-		float kx = 50;
+		float kx = 10;
 
-		Vector3f springForce = diff * kx;
+		Vector3f springForce = diff * kx * springBody->getMass();
 		springBody->applyForce(springForce);
 
 	}

@@ -22,6 +22,8 @@ namespace psim {
 		Vector3f vel;
 		Vector3f acc;
 
+		Vector3f momentum;
+
 		float mass;
 		float density;
 		float restitution;
@@ -97,6 +99,8 @@ namespace psim {
 		Vector3f& getVel();
 		
 		Vector3f& getAcc();
+
+		const Vector3f& getMomentum();
 
 		void setColor(Color c);
 

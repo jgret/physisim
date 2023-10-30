@@ -2,7 +2,7 @@
 
 Physisim is a physics simulator written in C++.
 
-![physisim.png](image\physisim.png)
+![physisim.png](image/physisim.png)
 
 ## Setup
 

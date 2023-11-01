@@ -11,7 +11,7 @@ psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0
 };
 
 psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) 
-	: pos(position), shape(shape), momentum(0), density(density), restitution(restitution), color(color), drawVectors(drawVectors)
+	: pos(position), shape(shape), linearMomentum(0), density(density), restitution(restitution), color(color), drawVectors(drawVectors)
 {
 	this->id = nextId++;
 	this->damping = AIR_DAMPING;
@@ -19,12 +19,24 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 
 	this->rotation = QuaternionFromMatrix(MatrixRotateXYZ(Vector3f{ PI / 2.0f, 0.0f, 0.0f }));
 
-	this->omega = { 0, 1, 0 };
-
 	if (mass == 0) // don't allow zero mass
 	{
 		std::cout << "RigidBody has zero mass" << std::endl;
 		mass = 1;
+	}
+
+	if (shape->getType() == SPHERE)
+	{
+
+		Sphere& s = static_cast<Sphere&>(*shape);
+		float r = s.getRadius();
+
+		inertia = 2.0f / 5.0f * mass * r * r;
+
+	}
+	else
+	{
+		inertia = 1;
 	}
 }
 
@@ -45,12 +57,19 @@ void psim::RigidBody::update(float fElapsedTime) {
 	if (this->shape->getType() == SPHERE) {
 
 		Sphere* s = (Sphere*) this->shape;
+		float y = this->getPos().y;
+		float radius = s->getRadius();
 
-		if (this->getPos().y - s->getRadius() <= 0) {
+		if (y - radius <= 0) {
 		
-			this->pos.y = s->getRadius();
+			this->pos.y = radius;
 			this->vel.y *= -this->restitution;
+			damping = 1.0f;
+			Vector3f d = Vector3f{ 0, -radius, 0 };
+			Vector3f friction = -damping * ( vel + omega.cross(d));
+			applyForce(friction, d);
 		}
+
 
 	}
 
@@ -66,8 +85,14 @@ void psim::RigidBody::clearForces()
 	acc = Vector3f::ZERO;
 }
 
-void psim::RigidBody::applyForce(psim::Vector3f force) {
+void psim::RigidBody::applyForce(const psim::Vector3f &force) {
 	this->acc += force / this->mass;
+}
+
+void psim::RigidBody::applyForce(Vector3f& force, Vector3f& p)
+{
+	applyForce(force);
+	this->torque = p.cross(force);
 }
 
 void psim::RigidBody::addAcceleration(psim::Vector3f acc) {
@@ -120,9 +145,24 @@ const psim::Vector3f& psim::RigidBody::getForce() const
 	return this->force;
 }
 
-const psim::Vector3f& psim::RigidBody::getMomentum() const
+const psim::Vector3f& psim::RigidBody::getTorque() const
 {
-	return this->momentum;
+	return this->torque;
+}
+
+const psim::Vector3f& psim::RigidBody::getLinearMomentum() const
+{
+	return this->linearMomentum;
+}
+
+const psim::Vector3f& psim::RigidBody::getAngularMomentum() const
+{
+	return this->angularMomentum;
+}
+
+const float psim::RigidBody::getInertia() const
+{
+	return this->inertia;
 }
 
 psim::ShapeType psim::RigidBody::getShapeType() const {
@@ -131,8 +171,9 @@ psim::ShapeType psim::RigidBody::getShapeType() const {
 
 float psim::RigidBody::getTotalEnergy()
 {
-	// Ekin + Epot
-	return this->mass * this->vel.mag2() * 0.5f + this->mass * 9.81f * this->pos.y;
+	// 0.5 * mv² + 0.5 * Iw² + mgh
+	return 0.5f * mass * vel.mag2() + 0.5f * inertia * omega.mag2()
+		 + mass * 9.81f * pos.y;
 }
 
 void psim::RigidBody::showVectors(bool b) {
@@ -176,6 +217,11 @@ int psim::RigidBody::appendToStateVector(StateVector& y, int idx)
 	y[idx++] = omega.y;
 	y[idx++] = omega.z;
 
+	// angular momentum
+	y[idx++] = angularMomentum.x;
+	y[idx++] = angularMomentum.y;
+	y[idx++] = angularMomentum.z;
+
 	return idx;
 }
 
@@ -203,7 +249,12 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 	omega.y = y[idx++];
 	omega.z = y[idx++];
 
-	this->momentum = mass * vel;
+	// angular momentum
+	angularMomentum.x = y[idx++];
+	angularMomentum.y = y[idx++];
+	angularMomentum.z = y[idx++];
+
+	this->linearMomentum = mass * vel;
 	this->force = mass * acc;
 
 	this->shape->transform(QuaternionToMatrix(rotation));
@@ -211,3 +262,12 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 	return idx;
 }
 
+psim::Vector3f psim::getLocalPosition(const Vector3f& origin, const Vector3f& p)
+{
+	return p - origin;
+}
+
+psim::Vector3f psim::getWorldPosition(const Vector3f& origin, const Vector3f lp)
+{
+	return origin + lp;
+}

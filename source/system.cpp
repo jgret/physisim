@@ -135,7 +135,7 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 
     const float velThreshold = 0.0;
 
-    float pBefore = (pObj1->getMomentum() + pObj2->getMomentum()).mag();
+    float pBefore = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
 
     //if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
     //    return;
@@ -194,7 +194,7 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 	pObj1->getVel() = velocityAfter1n + normalComponents1;
 	pObj2->getVel() = velocityAfter2n + normalComponents2;
 
-    float pAfter = (pObj1->getMomentum() + pObj2->getMomentum()).mag();
+    float pAfter = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
 
     float pAbsDiff = std::abs(pBefore - pAfter);
     if (pAbsDiff > std::numeric_limits<float>::epsilon())
@@ -290,7 +290,10 @@ StateVector psim::system_dydt(float t, StateVector& y)
     for (int idx = 0; idx < objects.size(); idx++)
     {
         int offset = idx * RIGIDBODY_SIZE_IN_STATE_VECTOR;
-        Vector3f& acc = objects[idx]->getAcc();
+        RigidBody& body = *objects[idx];
+        Vector3f& acc = body.getAcc();
+        const Vector3f& torque = body.getTorque();
+        float inertia = body.getInertia();
 
         // dx/dt
         ydot[offset + 0] = y[offset + 3];
@@ -328,10 +331,14 @@ StateVector psim::system_dydt(float t, StateVector& y)
         ydot[offset + 8] = qdot.z;
         ydot[offset + 9] = qdot.w;
 
-        ydot[offset + 10] = 0;
-        ydot[offset + 11] = 0;
-        ydot[offset + 12] = 0;
+        // w = L / I
+        ydot[offset + 10] = y[offset + 13] / inertia;
+        ydot[offset + 11] = y[offset + 14] / inertia;
+        ydot[offset + 12] = y[offset + 15] / inertia;
 
+        ydot[offset + 13] = torque.x;
+        ydot[offset + 14] = torque.y;
+        ydot[offset + 15] = torque.z;
     }
 
     return ydot;

@@ -68,12 +68,16 @@ bool psim::Simulation::init()
 	//	}
 	//}
 
-	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 5, 0}, new psim::Sphere(5));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 1, 0}, new psim::Sphere(1));
 	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1));
 	system.addRigidBody(a);
-	system.addRigidBody(b);
+	//system.addRigidBody(b);
 	//a->setRestitution(1);
 	//b->setRestitution(1);
+
+	a->getVel() = Vector3f{ 1, 0, 0 };
+
+
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));

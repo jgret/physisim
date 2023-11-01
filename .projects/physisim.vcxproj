@@ -279,6 +279,7 @@
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\plane.cpp" />
     <ClCompile Include="..\source\rigidbody.cpp" />
+    <ClCompile Include="..\source\rk4solver.cpp" />
     <ClCompile Include="..\source\shape.cpp" />
     <ClCompile Include="..\source\simulation.cpp" />
     <ClCompile Include="..\source\sphere.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="..\source\plane.h" />
     <ClInclude Include="..\source\psim_core.h" />
     <ClInclude Include="..\source\rigidbody.h" />
+    <ClInclude Include="..\source\rk4solver.h" />
     <ClInclude Include="..\source\shape.h" />
     <ClInclude Include="..\source\simulation.h" />
     <ClInclude Include="..\source\sphere.h" />

@@ -43,16 +43,9 @@ void psim::RigidBody::update(float fElapsedTime) {
 		
 			this->pos.y = s->getRadius();
 			this->vel.y *= -this->restitution;
-
 		}
 
 	}
-
-	pos += vel * fElapsedTime;
-
-	vel += (acc - (vel * damping) ) * fElapsedTime;
-
-	momentum = mass * vel;
 
 }
 
@@ -146,5 +139,35 @@ void psim::RigidBody::setColor(Color c) {
 int psim::RigidBody::getId()
 {
 	return this->id;
+}
+
+int psim::RigidBody::getSizeInStateVector()
+{
+	return 6; // 3 for position, 3 for velocies
+}
+
+int psim::RigidBody::appendToStateVector(StateVector& y, int idx)
+{
+	y[idx++] = pos.x;
+	y[idx++] = pos.y;
+	y[idx++] = pos.z;
+	y[idx++] = vel.x;
+	y[idx++] = vel.y;
+	y[idx++] = vel.z;
+
+	return idx;
+}
+
+int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
+{
+
+	pos.x = y[idx++];
+	pos.y = y[idx++];
+	pos.z = y[idx++];
+	vel.x = y[idx++];
+	vel.y = y[idx++];
+	vel.z = y[idx++];
+	
+	return idx;
 }
 

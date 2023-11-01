@@ -2,16 +2,20 @@
 
 #include "system.h"
 #include "raylib.h"
+#include "rk4solver.h"
 
 namespace psim {
 
 	class Simulation
 	{
 
+	public:
+		static System system;
+
 	private:
 
-		System system;
 		Camera3D camera;
+		Rk4Solver solver;
 
 		bool paused;
 		int nUpdateCount;
@@ -27,6 +31,7 @@ namespace psim {
 	public:
 
 		Simulation();
+		~Simulation();
 
 		bool init();
 

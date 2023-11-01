@@ -201,6 +201,30 @@ void psim::System::step(float fElapsedTime)
 
 }
 
+StateVector psim::System::getStateVector()
+{
+
+    int idx = 0;
+    StateVector out(6 * objects.size());
+    for (auto body : objects)
+    {
+        idx = body->appendToStateVector(out, idx);
+    }
+
+    return out;
+}
+
+void psim::System::update(StateVector& y)
+{
+
+    int idx = 0;
+    for (auto body : objects)
+    {
+        idx = body->updateFromStateVector(y, idx);
+    }
+
+}
+
 RigidBody* psim::System::raycastSelect(Ray &ray)
 {
     Vector3f p;
@@ -244,4 +268,27 @@ float System::getTotalEnergy()
 std::vector<psim::RigidBody*>& System::getObjects()
 {
     return objects;
+}
+
+StateVector psim::system_dydt(float t, StateVector& y)
+{
+
+    std::vector<RigidBody*>& objects = Simulation::system.getObjects();
+    StateVector ydot(y.size());
+
+    for (int idx = 0; idx < objects.size(); idx++)
+    {
+        int offset = idx * 6;
+        Vector3f& acc = objects[idx]->getAcc();
+
+        ydot[offset + 0] = y[offset + 3];
+        ydot[offset + 1] = y[offset + 4];
+        ydot[offset + 2] = y[offset + 5];
+        ydot[offset + 3] = acc.x;
+        ydot[offset + 4] = acc.y;
+        ydot[offset + 5] = acc.z;
+
+    }
+
+    return ydot;
 }

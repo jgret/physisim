@@ -3,6 +3,7 @@
 #include "vector3f.h"
 #include "shape.h"
 #include "physic_constant.h"
+#include "rk4solver.h"
 
 namespace psim {
 
@@ -106,6 +107,9 @@ namespace psim {
 
 		int getId();
 
+		int getSizeInStateVector();
+		int appendToStateVector(StateVector& y, int idx);
+		int updateFromStateVector(const StateVector& y, int idx);
 
 		bool operator==(const RigidBody& other) const
 		{

@@ -54,6 +54,7 @@
     <ClCompile Include="..\source\simulation.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\rk4solver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\utils.h">
@@ -98,6 +99,7 @@
     <ClInclude Include="..\source\psim_core.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\rk4solver.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\icon.ico">

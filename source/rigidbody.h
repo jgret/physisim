@@ -7,6 +7,8 @@
 
 namespace psim {
 
+#define RIGIDBODY_SIZE_IN_STATE_VECTOR 13
+
 	class RigidBody
 	{
 
@@ -22,8 +24,11 @@ namespace psim {
 		Vector3f pos;
 		Vector3f vel;
 		Vector3f acc;
+		Vector3f force;
 
+		Vector3f omega;
 		Vector3f momentum;
+		Quaternion rotation;
 
 		float mass;
 		float density;
@@ -101,14 +106,16 @@ namespace psim {
 		
 		Vector3f& getAcc();
 
-		const Vector3f& getMomentum();
+		const Vector3f& getForce() const;
+
+		const Vector3f& getMomentum() const;
 
 		void setColor(Color c);
 
 		int getId();
 
-		int getSizeInStateVector();
 		int appendToStateVector(StateVector& y, int idx);
+
 		int updateFromStateVector(const StateVector& y, int idx);
 
 		bool operator==(const RigidBody& other) const

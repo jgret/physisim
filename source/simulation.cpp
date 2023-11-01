@@ -32,7 +32,8 @@ psim::Simulation::Simulation()
 	camera = { 0 };
 	nUpdateCount = 0;
 	nRequiredUpdateCount = 0;
-	system = System();
+	system.~System();
+	system = std::move(System());
 }
 
 psim::Simulation::~Simulation()

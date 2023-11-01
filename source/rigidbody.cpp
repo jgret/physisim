@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include "rigidbody.h"
+#include "raymath.h"
 #include "collision.h"
 
 int psim::RigidBody::nextId = 0;
@@ -15,6 +16,10 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 	this->id = nextId++;
 	this->damping = AIR_DAMPING;
 	this->mass = shape->getVolume() * this->density;
+
+	this->rotation = QuaternionFromMatrix(MatrixRotateXYZ(Vector3f{ PI / 2.0f, 0.0f, 0.0f }));
+
+	this->omega = { 0, 1, 0 };
 
 	if (mass == 0) // don't allow zero mass
 	{
@@ -32,6 +37,8 @@ void psim::RigidBody::init() {
 	this->acc = psim::Vector3f::ZERO;
 	this->vel = psim::Vector3f::ZERO;
 }
+
+float angle;
 
 void psim::RigidBody::update(float fElapsedTime) {
 
@@ -108,7 +115,12 @@ psim::Vector3f& psim::RigidBody::getAcc() {
 	return this->acc;
 }
 
-const psim::Vector3f& psim::RigidBody::getMomentum()
+const psim::Vector3f& psim::RigidBody::getForce() const
+{
+	return this->force;
+}
+
+const psim::Vector3f& psim::RigidBody::getMomentum() const
 {
 	return this->momentum;
 }
@@ -141,19 +153,28 @@ int psim::RigidBody::getId()
 	return this->id;
 }
 
-int psim::RigidBody::getSizeInStateVector()
-{
-	return 6; // 3 for position, 3 for velocies
-}
-
 int psim::RigidBody::appendToStateVector(StateVector& y, int idx)
 {
+	// position
 	y[idx++] = pos.x;
 	y[idx++] = pos.y;
 	y[idx++] = pos.z;
+
+	// velocity
 	y[idx++] = vel.x;
 	y[idx++] = vel.y;
 	y[idx++] = vel.z;
+
+	// rotation
+	y[idx++] = rotation.x;
+	y[idx++] = rotation.y;
+	y[idx++] = rotation.z;
+	y[idx++] = rotation.w;
+
+	// omega
+	y[idx++] = omega.x;
+	y[idx++] = omega.y;
+	y[idx++] = omega.z;
 
 	return idx;
 }
@@ -161,13 +182,32 @@ int psim::RigidBody::appendToStateVector(StateVector& y, int idx)
 int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 {
 
+	// position
 	pos.x = y[idx++];
 	pos.y = y[idx++];
 	pos.z = y[idx++];
+
+	// velocity
 	vel.x = y[idx++];
 	vel.y = y[idx++];
 	vel.z = y[idx++];
-	
+
+	// rotation
+	rotation.x = y[idx++];
+	rotation.y = y[idx++];
+	rotation.z = y[idx++];
+	rotation.w = y[idx++];
+
+	// omega
+	omega.x = y[idx++];
+	omega.y = y[idx++];
+	omega.z = y[idx++];
+
+	this->momentum = mass * vel;
+	this->force = mass * acc;
+
+	this->shape->transform(QuaternionToMatrix(rotation));
+
 	return idx;
 }
 

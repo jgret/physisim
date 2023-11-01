@@ -1,14 +1,26 @@
 #include "sphere.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "collision.h"
 
 using namespace psim;
 
+psim::Sphere::Sphere(float r) : Shape(ShapeType::SPHERE, BLUE), r(r)
+{
+	const int rings = 14;
+	const int slices = 14;
+	Mesh mesh = GenMeshSphere(r, rings, slices);
+	this->model = LoadModelFromMesh(mesh);
+};
+
 void Sphere::draw(const Vector3f& pos) const
 {
-	const int rings = 14, slices = 14;
-	DrawSphereEx(pos, this->r, rings, slices, this->color);
-	DrawSphereWires(pos, this->r, rings, slices, BLACK);
+	//const int rings = 14, slices = 14;
+	//DrawSphereEx(pos, this->r, rings, slices, this->color);
+	//DrawSphereWires(pos, this->r, rings, slices, BLACK);
+
+	DrawModel(model, pos, 1, color);
+	DrawModelWires(model, pos, 1, BLACK);
 }
 
 float psim::Sphere::getVolume() const

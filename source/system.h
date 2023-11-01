@@ -17,6 +17,7 @@ namespace psim {
 	public:
 
 		System();
+		~System();
 
 		void addRigidBody(psim::RigidBody* b);
 		psim::RigidBody* removeRigidBody(psim::RigidBody* b);

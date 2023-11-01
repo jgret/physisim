@@ -11,9 +11,7 @@ namespace psim {
 		float r;	// radius
 
 	public:
-		Sphere(float r = 0) : Shape(ShapeType::SPHERE, BLUE), r(r)
-		{
-		};
+		Sphere(float r = 0);
 
 		virtual void draw(const Vector3f& pos) const;
 		float getVolume() const;

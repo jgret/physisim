@@ -30,7 +30,7 @@ int main(void)
 
         if (IsKeyPressed(KEY_R))
         {
-            // restart simulation;
+            std::cout << "Restarting Simulation..." << std::endl;
             delete simulation;
             simulation = new psim::Simulation();
             simulation->init();

@@ -1,11 +1,18 @@
 #include "physisim.h"
 #include <cassert>
+#include "raymath.h"
 
 using namespace psim;
 
 System::System()
 {
     
+}
+
+psim::System::~System()
+{
+    for (RigidBody* body : objects)
+        delete body;
 }
 
 void System::addRigidBody(psim::RigidBody* b)
@@ -101,7 +108,6 @@ void psim::System::checkCollision()
 void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f& normal, float depth)
 {
     Vector3f move = normal * depth / 2;
-
     pObj1->getPos() -= move;
     pObj2->getPos() += move;
 
@@ -111,11 +117,16 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
     //    // ! normal vetor always points from pObj1 to pObj2 !
     //    Vector3f normalForce{ 0 };
     //    normalForce = kNormalForce * depth * normal;
-
     //    pObj1->applyForce(-1 * normalForce * pObj1->getMass());
     //    pObj2->applyForce(normalForce * pObj2->getMass());
-
     //}
+
+    //Vector3f &normal1 = normal;
+    //Vector3f normal2 = -1 * normal;
+    //Vector3f normalForce1 = (normal2 * pObj1->getForce()) * normal1;
+    //Vector3f normalForce2 = (normal1 * pObj2->getForce()) * normal2;
+    //pObj1->applyForce(normal1);
+    //pObj2->applyForce(normal2);
 
 }
 
@@ -205,7 +216,7 @@ StateVector psim::System::getStateVector()
 {
 
     int idx = 0;
-    StateVector out(6 * objects.size());
+    StateVector out(RIGIDBODY_SIZE_IN_STATE_VECTOR * objects.size());
     for (auto body : objects)
     {
         idx = body->appendToStateVector(out, idx);
@@ -278,15 +289,48 @@ StateVector psim::system_dydt(float t, StateVector& y)
 
     for (int idx = 0; idx < objects.size(); idx++)
     {
-        int offset = idx * 6;
+        int offset = idx * RIGIDBODY_SIZE_IN_STATE_VECTOR;
         Vector3f& acc = objects[idx]->getAcc();
 
+        // dx/dt
         ydot[offset + 0] = y[offset + 3];
         ydot[offset + 1] = y[offset + 4];
         ydot[offset + 2] = y[offset + 5];
+
+        // dv/dt
         ydot[offset + 3] = acc.x;
         ydot[offset + 4] = acc.y;
         ydot[offset + 5] = acc.z;
+
+        Quaternion rotation = 
+        {
+            y[offset + 6],
+            y[offset + 7],
+            y[offset + 8],
+            y[offset + 9]
+        };
+
+        Quaternion omega = 
+        {
+            y[offset + 10],
+            y[offset + 11],
+            y[offset + 12],
+            0
+        };
+
+        // qdot = 1/2 * w * q
+        Quaternion qdot = QuaternionScale(QuaternionMultiply(omega, rotation), 0.5f);
+        
+        //qdot.z *= -1;
+
+        ydot[offset + 6] = qdot.x;
+        ydot[offset + 7] = qdot.y;
+        ydot[offset + 8] = qdot.z;
+        ydot[offset + 9] = qdot.w;
+
+        ydot[offset + 10] = 0;
+        ydot[offset + 11] = 0;
+        ydot[offset + 12] = 0;
 
     }
 

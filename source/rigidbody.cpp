@@ -38,6 +38,8 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 	{
 		inertia = 1;
 	}
+
+	this->shape->transform(getTransform());
 }
 
 psim::RigidBody::~RigidBody()
@@ -54,35 +56,59 @@ float angle;
 
 void psim::RigidBody::update(float fElapsedTime) {
 
-	if (this->shape->getType() == SPHERE) {
+	BoundingBox box = shape->getAABB();
+	float y = box.min.y + pos.y;
 
-		Sphere* s = (Sphere*) this->shape;
-		float y = this->getPos().y;
-		float radius = s->getRadius();
-
-		if (y - radius <= 0) {
-		
-			this->pos.y = radius;
-			this->vel.y *= -this->restitution;
-			damping = 1.0f;
-			Vector3f d = Vector3f{ 0, -radius, 0 };
-			Vector3f friction = -damping * ( vel + omega.cross(d));
-			applyForce(friction, d);
-		}
-
-
+	if (y < 0.0f)
+	{
+		// box is below ground, lift it up
+		pos.y += -y;
+		vel.y *= -restitution;
+	
+		damping = .5f;
+		Vector3f d = Vector3f{ 0, y, 0 };
+		Vector3f friction = -damping * (vel + omega.cross(d));
+		//std::cout << friction << std::endl;
+		applyForce(friction, d);
 	}
+
+
+	//if (this->shape->getType() == SPHERE) 
+	//{
+
+	//	Sphere* s = static_cast<Sphere*>(shape);
+	//	float y = this->getPos().y;
+	//	float radius = s->getRadius();
+
+	//	if (y - radius <= 0) {
+	//	
+	//		this->pos.y = radius;
+	//		this->vel.y *= -this->restitution;
+
+	//	}
+
+	//}
+	//else if (this->shape->getType() == CUBOID)
+	//{
+
+	//	Cuboid* c = static_cast<Cuboid*>(shape);
+
+	//}
 
 }
 
 void psim::RigidBody::draw() {
 	DrawLine3D(pos, pos + vel, BLUE);
+	DrawLine3D(pos, pos + omega, RED);
+	DrawLine3D(pos, pos + acc, GREEN);
 	this->shape->draw(pos);
 }
 
 void psim::RigidBody::clearForces()
 {
 	acc = Vector3f::ZERO;
+	force = Vector3f::ZERO;
+	torque = Vector3f::ZERO;
 }
 
 void psim::RigidBody::applyForce(const psim::Vector3f &force) {
@@ -92,7 +118,7 @@ void psim::RigidBody::applyForce(const psim::Vector3f &force) {
 void psim::RigidBody::applyForce(Vector3f& force, Vector3f& p)
 {
 	applyForce(force);
-	this->torque = p.cross(force);
+	this->torque += p.cross(force);
 }
 
 void psim::RigidBody::addAcceleration(psim::Vector3f acc) {
@@ -163,6 +189,14 @@ const psim::Vector3f& psim::RigidBody::getAngularMomentum() const
 const float psim::RigidBody::getInertia() const
 {
 	return this->inertia;
+}
+
+Matrix psim::RigidBody::getTransform() const
+{
+	Matrix matScale = MatrixScale(1.0f, 1.0f, 1.0f);
+	Matrix rotationMatrix = QuaternionToMatrix(rotation);
+	Matrix translationMatrix = MatrixTranslate(pos.x, pos.y, pos.z);
+	return MatrixMultiply(MatrixMultiply(matScale, rotationMatrix), translationMatrix);
 }
 
 psim::ShapeType psim::RigidBody::getShapeType() const {
@@ -257,7 +291,7 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 	this->linearMomentum = mass * vel;
 	this->force = mass * acc;
 
-	this->shape->transform(QuaternionToMatrix(rotation));
+	this->shape->transform(getTransform());
 
 	return idx;
 }

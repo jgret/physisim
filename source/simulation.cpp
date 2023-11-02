@@ -4,6 +4,7 @@
 #include "simulation.h"
 #include "utils.h"
 #include "sphere.h"
+#include "cuboid.h"
 #include "raymath.h"
 
 // ------------- CONSTANTS --------------------------
@@ -68,16 +69,15 @@ bool psim::Simulation::init()
 	//	}
 	//}
 
-	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 1, 0}, new psim::Sphere(1));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(1));
 	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1));
+	psim::RigidBody* c = new psim::RigidBody(Vector3f{ 0, 5, 0 }, new psim::Cuboid());
+
 	system.addRigidBody(a);
-	//system.addRigidBody(b);
-	//a->setRestitution(1);
-	//b->setRestitution(1);
+	system.addRigidBody(b);
+	system.addRigidBody(c);
 
 	a->getVel() = Vector3f{ 1, 0, 0 };
-
-
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));

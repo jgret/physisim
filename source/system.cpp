@@ -250,17 +250,16 @@ RigidBody* psim::System::raycastSelect(Ray& ray, Vector3f& contactPoint)
     for (auto& body : objects)
     {
 
-        if (body->getShapeType() == psim::SPHERE)
+        BoundingBox box = body->getShape().getAABB();
+        box.min += body->getPos();
+        box.max += body->getPos();
+
+        RayCollision result = GetRayCollisionBox(ray, box);
+
+        if (result.hit)
         {
-            psim::Sphere& s = (psim::Sphere&)body->getShape();
-
-            RayCollision result = GetRayCollisionSphere(ray, body->getPos(), s.getRadius());
-
-            if (result.hit)
-            {
-                trackBody = body;
-                contactPoint = Vector3f{ result.point };
-            }
+            trackBody = body;
+            contactPoint = Vector3f{ result.point };
         }
     }
     return trackBody;

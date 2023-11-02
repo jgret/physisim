@@ -129,6 +129,8 @@ namespace psim
 
         const float getInertia() const;
 
+        Matrix getTransform() const;
+
         void setColor(Color c);
 
         int getId();

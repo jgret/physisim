@@ -7,6 +7,8 @@ namespace psim {
 	class Vector3f : public Vector3
 	{
 
+		friend std::ostream;
+
 	public:
 		static const Vector3f ZERO;
 
@@ -114,11 +116,14 @@ namespace psim {
 		*/
 		float angle(const Vector3f& other);
 
-		std::string toString();
+		std::string toString() const;
+
 
 	};
 
 	Vector3f operator*(const float f, const Vector3f& v);
+
+	std::ostream& operator<<(std::ostream& out, const Vector3f& v);
 
 
 }
@@ -128,3 +133,6 @@ namespace psim {
 psim::Vector3f operator+(const Vector3& a, const Vector3& b);
 
 psim::Vector3f operator-(const Vector3& a, const Vector3& b);
+
+void operator+=(Vector3& a, const Vector3& b);
+

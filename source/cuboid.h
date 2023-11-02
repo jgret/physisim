@@ -7,19 +7,14 @@ namespace psim {
 	class Cuboid : public Shape
 	{
 	private:
-		Vector3f center;
 		Vector3f dim;
 
 	public:
-		Cuboid(Vector3f center = Vector3f{ 0, 0, 0 }, Vector3f dim = Vector3f{ 1, 1, 1 }) 
-			: Shape(ShapeType::CUBOID, RED), center(center), dim{ dim } 
-		{
-		};
+		Cuboid(Vector3f dim = Vector3f{ 1, 1, 1 });
+		~Cuboid();
 
-		void draw();
-		float getVolume();
-		bool checkCollision(RigidBody& other);
-		void onCollision();
+		void draw(const Vector3f& pos) const;
+		float getVolume() const;
 
 
 	};

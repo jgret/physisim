@@ -37,6 +37,7 @@ namespace psim {
 
 		void transform(Matrix& matrix);
 
+		BoundingBox getAABB();
 
 	};
 

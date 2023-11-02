@@ -7,11 +7,15 @@ using namespace psim;
 
 psim::Sphere::Sphere(float r) : Shape(ShapeType::SPHERE, BLUE), r(r)
 {
-	const int rings = 14;
+	const int rings = 7;
 	const int slices = 14;
 	Mesh mesh = GenMeshSphere(r, rings, slices);
 	this->model = LoadModelFromMesh(mesh);
-};
+}
+psim::Sphere::~Sphere()
+{
+	UnloadModel(model);
+}
 
 void Sphere::draw(const Vector3f& pos) const
 {
@@ -19,8 +23,8 @@ void Sphere::draw(const Vector3f& pos) const
 	//DrawSphereEx(pos, this->r, rings, slices, this->color);
 	//DrawSphereWires(pos, this->r, rings, slices, BLACK);
 
-	DrawModel(model, pos, 1, color);
-	DrawModelWires(model, pos, 1, BLACK);
+	DrawModel(model, Vector3f::ZERO, 1, color);
+	DrawModelWires(model, Vector3f::ZERO, 1, BLACK);
 }
 
 float psim::Sphere::getVolume() const
@@ -56,11 +60,6 @@ float psim::Sphere::getVolume() const
 //
 //	return collision;
 //}
-
-void Sphere::onCollision()
-{
-
-}
 
 float Sphere::getRadius() const
 {

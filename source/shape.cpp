@@ -6,7 +6,6 @@ psim::Shape::Shape(ShapeType type, Color color) : type(type), color(color)
 
 psim::Shape::~Shape()
 {
-	UnloadModel(model);
 }
 
 psim::ShapeType psim::Shape::getType()
@@ -27,4 +26,9 @@ void psim::Shape::setColor(Color c)
 void psim::Shape::transform(Matrix& matrix)
 {
 	model.transform = matrix;
+}
+
+BoundingBox psim::Shape::getAABB()
+{
+	return GetModelBoundingBox(model);
 }

@@ -161,8 +161,6 @@ float psim::Vector3f::angle(const Vector3f& other)
 	dotproduct = (*this) * other;
 	cos_angle = dotproduct / (this->mag() * other.mag());
 
-
-
 	angle = acosf(cos_angle);
 	return angle;
 }
@@ -180,7 +178,7 @@ float psim::Vector3f::angle(const Vector3f& other)
 //	}
 //};
 
-std::string psim::Vector3f::toString()
+std::string psim::Vector3f::toString() const
 {
 	std::ostringstream oss;
 	//oss.imbue(std::locale(oss.getloc(), new sign_padding));
@@ -199,6 +197,11 @@ Vector3f psim::operator*(const float f, const Vector3f& v)
 	};
 }
 
+std::ostream& psim::operator<<(std::ostream& out, const Vector3f& v)
+{
+	return out << v.toString();
+}
+
 // extra operators for compatibility with raylib's vector3
 
 Vector3f operator+(const Vector3& a, const Vector3& b)
@@ -209,4 +212,11 @@ Vector3f operator+(const Vector3& a, const Vector3& b)
 Vector3f operator-(const Vector3& a, const Vector3& b)
 {
 	return Vector3f{ a.x - b.x, a.y - b.y, a.z - b.z };
+}
+
+void operator+=(Vector3& a, const Vector3& b)
+{
+	a.x += b.x;
+	a.y += b.y;
+	a.z += b.z;
 }

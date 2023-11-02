@@ -12,10 +12,10 @@ namespace psim {
 
 	public:
 		Sphere(float r = 0);
+		~Sphere();
 
 		virtual void draw(const Vector3f& pos) const;
 		float getVolume() const;
-		void onCollision();
 
 		float getRadius() const;
 

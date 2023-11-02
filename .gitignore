@@ -1,5 +1,7 @@
 raylib-master
 bin
 build
+packages
+*Microsoft*
 .vs
 obj

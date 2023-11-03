@@ -55,6 +55,7 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\source\rk4solver.cpp" />
+    <ClCompile Include="..\source\raylib_extra.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\utils.h">
@@ -100,6 +101,7 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\source\rk4solver.h" />
+    <ClInclude Include="..\source\raylib_extra.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\icon.ico">

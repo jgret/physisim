@@ -136,3 +136,4 @@ psim::Vector3f operator-(const Vector3& a, const Vector3& b);
 
 void operator+=(Vector3& a, const Vector3& b);
 
+psim::Vector3f operator*(const Matrix& m, const Vector3& v);

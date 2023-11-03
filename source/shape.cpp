@@ -1,4 +1,7 @@
 #include "shape.h"
+#include "raymath.h"
+#include "vector3f.h"
+#include "raylib_extra.h"
 
 psim::Shape::Shape(ShapeType type, Color color) : type(type), color(color)
 {
@@ -30,5 +33,11 @@ void psim::Shape::transform(Matrix& matrix)
 
 BoundingBox psim::Shape::getAABB()
 {
-	return GetModelBoundingBox(model);
+	BoundingBox box = GetTransformedModelBoundingBox(model);
+
+	// transform bounding box
+	//box.min = model.transform * box.min;
+	//box.max = model.transform * box.max;
+
+	return box;
 }

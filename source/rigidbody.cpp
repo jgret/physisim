@@ -66,7 +66,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 		vel.y *= -restitution;
 	
 		damping = .5f;
-		Vector3f d = Vector3f{ 0, y, 0 };
+		Vector3f d = Vector3f{ 0,  y - pos.y, 0 };
 		Vector3f friction = -damping * (vel + omega.cross(d));
 		//std::cout << friction << std::endl;
 		applyForce(friction, d);

@@ -220,3 +220,14 @@ void operator+=(Vector3& a, const Vector3& b)
 	a.y += b.y;
 	a.z += b.z;
 }
+
+psim::Vector3f operator*(const Matrix& m, const Vector3& v)
+{
+	Vector3f ret = { 0 };
+
+	ret.x = m.m0 * v.x + m.m4 * v.y + m.m8 * v.z;
+	ret.y = m.m1 * v.x + m.m5 * v.y + m.m9 * v.z;
+	ret.z = m.m2 * v.x + m.m6 * v.y + m.m10 * v.z;
+
+	return ret;
+}

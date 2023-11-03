@@ -369,6 +369,8 @@ void psim::Simulation::render()
 		for (psim::RigidBody* body : system.getObjects())
 		{
 			body->draw();
+			BoundingBox box = body->getShape().getAABB();
+			DrawBoundingBox(box, GREEN);
 		}
 
 		if (springBody)

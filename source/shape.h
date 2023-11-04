@@ -2,6 +2,7 @@
 
 #include "vector3f.h"
 #include "raylib.h"
+#include "matrix3x3.h"
 
 namespace psim {
 
@@ -37,7 +38,9 @@ namespace psim {
 
 		void transform(Matrix& matrix);
 
-		BoundingBox getAABB();
+		virtual BoundingBox getAABB() const;
+
+		virtual Matrix3x3 computeInertiaTensor() const = 0;
 
 	};
 

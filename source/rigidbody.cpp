@@ -33,13 +33,15 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 
 		inertia = 2.0f / 5.0f * mass * r * r;
 
-	}
-	else
-	{
-		inertia = 1;
-	}
+    }
+    else
+    {
+        inertia = 1;
+    }
 
-	this->shape->transform(getTransform());
+	inertiaTensor = shape->computeInertiaTensor() * mass;
+
+    this->shape->transform(getTransform());
 }
 
 psim::RigidBody::~RigidBody()
@@ -55,23 +57,6 @@ void psim::RigidBody::init() {
 float angle;
 
 void psim::RigidBody::update(float fElapsedTime) {
-
-	BoundingBox box = shape->getAABB();
-	float y = box.min.y + pos.y;
-
-	if (y < 0.0f)
-	{
-		// box is below ground, lift it up
-		pos.y += -y;
-		vel.y *= -restitution;
-	
-		damping = .5f;
-		Vector3f d = Vector3f{ 0,  y - pos.y, 0 };
-		Vector3f friction = -damping * (vel + omega.cross(d));
-		//std::cout << friction << std::endl;
-		applyForce(friction, d);
-	}
-
 
 	//if (this->shape->getType() == SPHERE) 
 	//{
@@ -115,7 +100,7 @@ void psim::RigidBody::applyForce(const psim::Vector3f &force) {
 	this->acc += force / this->mass;
 }
 
-void psim::RigidBody::applyForce(Vector3f& force, Vector3f& p)
+void psim::RigidBody::applyForce(const psim::Vector3f& force, const psim::Vector3f& p)
 {
 	applyForce(force);
 	this->torque += p.cross(force);
@@ -188,7 +173,7 @@ const psim::Vector3f& psim::RigidBody::getAngularMomentum() const
 
 const float psim::RigidBody::getInertia() const
 {
-	return this->inertia;
+	return inertia;
 }
 
 Matrix psim::RigidBody::getTransform() const
@@ -199,6 +184,22 @@ Matrix psim::RigidBody::getTransform() const
 	return MatrixMultiply(MatrixMultiply(matScale, rotationMatrix), translationMatrix);
 }
 
+psim::Vector3f psim::RigidBody::getVelAtPoint(const Vector3f& p) const
+{
+	return (vel + omega.cross(p));
+}
+
+BoundingBox psim::RigidBody::getAABB() const
+{
+	BoundingBox box = shape->getAABB();
+
+	// translate the position of the box
+	box.min += pos;
+	box.max += pos;
+
+	return box;
+
+}
 psim::ShapeType psim::RigidBody::getShapeType() const {
 	return this->shape->getType();
 }
@@ -290,6 +291,7 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 
 	this->linearMomentum = mass * vel;
 	this->force = mass * acc;
+	this->omega = angularMomentum / inertia;
 
 	this->shape->transform(getTransform());
 

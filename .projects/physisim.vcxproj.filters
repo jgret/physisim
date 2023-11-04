@@ -54,8 +54,13 @@
     <ClCompile Include="..\source\simulation.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\rk4solver.cpp" />
     <ClCompile Include="..\source\raylib_extra.cpp" />
+    <ClCompile Include="..\source\matrix3x3.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\rk4solver.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\utils.h">
@@ -68,9 +73,6 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\source\cuboid.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\shape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\source\sphere.h">
@@ -100,8 +102,16 @@
     <ClInclude Include="..\source\psim_core.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\rk4solver.h" />
     <ClInclude Include="..\source\raylib_extra.h" />
+    <ClInclude Include="..\source\matrix3x3.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\rk4solver.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\shape.h">
+      <Filter>Header Files\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\icon.ico">

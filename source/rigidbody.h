@@ -4,6 +4,7 @@
 #include "shape.h"
 #include "physic_constant.h"
 #include "rk4solver.h"
+#include "matrix3x3.h"
 
 namespace psim
 {
@@ -36,6 +37,7 @@ namespace psim
 
         float mass;
         float inertia; // let's treat inertia as a scalar, because we only have spheres...
+        Matrix3x3 inertiaTensor;
         float density;
         float restitution;
         float damping;
@@ -81,7 +83,7 @@ namespace psim
          * @param force
          * @param point
         */
-        void applyForce(Vector3f& force, Vector3f& p);
+        void applyForce(const Vector3f& force, const Vector3f& p);
 
         /**
          * @brief add acceleration to the rigid body
@@ -130,6 +132,10 @@ namespace psim
         const float getInertia() const;
 
         Matrix getTransform() const;
+
+        Vector3f getVelAtPoint(const Vector3f& p) const;
+
+        BoundingBox getAABB() const;
 
         void setColor(Color c);
 

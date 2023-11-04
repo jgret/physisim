@@ -65,3 +65,24 @@ float Sphere::getRadius() const
 {
 	return this->r;
 }
+
+BoundingBox psim::Sphere::getAABB() const
+{
+	BoundingBox box;
+	box.min = Vector3f{ -r, -r, -r };
+	box.max = Vector3f{ r, r, r };
+	return box;
+}
+
+Matrix3x3 psim::Sphere::computeInertiaTensor() const
+{
+
+	float i = 2.0f / 5.0f * r * r;
+
+	return Matrix3x3
+	{
+		i, 0, 0,
+		0, i, 0,
+		0, 0, i,
+	};
+}

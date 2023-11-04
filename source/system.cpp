@@ -103,6 +103,31 @@ void psim::System::checkCollision()
     }
 
 
+    for (RigidBody* body : objects)
+    {
+        BoundingBox box = body->getAABB();
+        const float& y = box.min.y;
+
+        if (y < 0.0f)
+        {
+
+            Vector3f& pos = body->getPos();
+            Vector3f& vel = body->getVel();
+            float restitution = body->getRestitution();
+
+            // box is below ground, lift it up
+            pos.y += -y;
+            vel.y *= -restitution;
+
+            float damping = body->getDamping();
+            Vector3f d = Vector3f{ 0,  y - pos.y, 0 };
+            Vector3f friction = -damping * body->getVelAtPoint(d);
+            //std::cout << friction << std::endl;
+            body->applyForce(friction, d);
+        }
+    }
+
+
 }
 
 void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f& normal, float depth)
@@ -329,11 +354,6 @@ StateVector psim::system_dydt(float t, StateVector& y)
         ydot[offset + 7] = qdot.y;
         ydot[offset + 8] = qdot.z;
         ydot[offset + 9] = qdot.w;
-
-        // w = L / I
-        ydot[offset + 10] = y[offset + 13] / inertia;
-        ydot[offset + 11] = y[offset + 14] / inertia;
-        ydot[offset + 12] = y[offset + 15] / inertia;
 
         ydot[offset + 13] = torque.x;
         ydot[offset + 14] = torque.y;

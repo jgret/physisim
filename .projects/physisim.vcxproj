@@ -277,6 +277,7 @@
     <ClCompile Include="..\source\collision.cpp" />
     <ClCompile Include="..\source\cuboid.cpp" />
     <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\matrix3x3.cpp" />
     <ClCompile Include="..\source\plane.cpp" />
     <ClCompile Include="..\source\raylib_extra.cpp" />
     <ClCompile Include="..\source\rigidbody.cpp" />
@@ -290,6 +291,7 @@
   <ItemGroup>
     <ClInclude Include="..\source\collision.h" />
     <ClInclude Include="..\source\cuboid.h" />
+    <ClInclude Include="..\source\matrix3x3.h" />
     <ClInclude Include="..\source\physic_constant.h" />
     <ClInclude Include="..\source\physisim.h" />
     <ClInclude Include="..\source\plane.h" />

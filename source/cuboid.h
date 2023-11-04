@@ -16,7 +16,7 @@ namespace psim {
 		void draw(const Vector3f& pos) const;
 		float getVolume() const;
 
-
+		virtual Matrix3x3 computeInertiaTensor() const;
 	};
 
 }

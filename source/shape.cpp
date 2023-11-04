@@ -31,7 +31,7 @@ void psim::Shape::transform(Matrix& matrix)
 	model.transform = matrix;
 }
 
-BoundingBox psim::Shape::getAABB()
+BoundingBox psim::Shape::getAABB() const
 {
 	BoundingBox box = GetTransformedModelBoundingBox(model);
 

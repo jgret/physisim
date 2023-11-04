@@ -69,8 +69,8 @@ bool psim::Simulation::init()
 	//	}
 	//}
 
-	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(1));
-	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(1.0f));
+	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1.0f));
 	psim::RigidBody* c = new psim::RigidBody(Vector3f{ 0, 5, 0 }, new psim::Cuboid());
 
 	system.addRigidBody(a);
@@ -347,12 +347,12 @@ void psim::Simulation::update(float fElapsedTime)
 	system.applyGravity();
 
 	// TODO: delete this, it only stops balls from fallung through the floor
-	system.step(fElapsedTime);
+	// system.step(fElapsedTime);
 	
 	
 	StateVector in = system.getStateVector();
 	StateVector out;
-	float time = GetTime();
+	float time = static_cast<float>(GetTime());
 	solver.step(in, out, time, fElapsedTime, system_dydt);
 	system.update(out);
 
@@ -369,7 +369,7 @@ void psim::Simulation::render()
 		for (psim::RigidBody* body : system.getObjects())
 		{
 			body->draw();
-			BoundingBox box = body->getShape().getAABB();
+			BoundingBox box = body->getAABB();
 			DrawBoundingBox(box, GREEN);
 		}
 

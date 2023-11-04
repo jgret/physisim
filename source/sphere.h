@@ -19,6 +19,10 @@ namespace psim {
 
 		float getRadius() const;
 
+		virtual BoundingBox getAABB() const;
+
+		virtual Matrix3x3 computeInertiaTensor() const;
+
 	};
 
 }

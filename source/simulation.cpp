@@ -43,6 +43,10 @@ psim::Simulation::~Simulation()
 
 bool psim::Simulation::init()
 {
+
+	std::vector<RigidBody*> test;
+
+
 	// init camera
 	camera.position = psim::Vector3f{ 0.0f, 10.0f, 25.0f };
 	camera.target = psim::Vector3f{ 0.0f, 4.0f, 0.0f };
@@ -51,23 +55,23 @@ bool psim::Simulation::init()
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
-	//static const int object_count = 4;
-	//for (int k = 0; k < 3; k++)
-	//{
-	//	for (int j = 0; j < 3; j++)
-	//	{
-	//		for (int i = 0; i < object_count; i++)
-	//		{
-	//			float r = 1;
-	//			psim::RigidBody* body = new psim::RigidBody(
-	//				Vector3f{j * 2 * r, i * 2 * r + r, k * 2 * r},
-	//				new psim::Sphere(r)
-	//			);
-	//			body->setRestitution(0);
-	//			system.addRigidBody(body);
-	//		}
-	//	}
-	//}
+	static const int object_count = 4;
+	for (int k = 0; k < 3; k++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			for (int i = 0; i < object_count; i++)
+			{
+				float r = 1;
+				psim::RigidBody* body = new psim::RigidBody(
+					Vector3f{j * 2 * r, i * 2 * r + r, k * 2 * r},
+					new psim::Sphere(r)
+				);
+				// body->setRestitution(0);
+				system.addRigidBody(body);
+			}
+		}
+	}
 
 	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(1.0f));
 	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1.0f));

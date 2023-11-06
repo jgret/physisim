@@ -6,7 +6,6 @@ using namespace psim;
 
 System::System()
 {
-    
 }
 
 psim::System::~System()

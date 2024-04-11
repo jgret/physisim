@@ -42,11 +42,13 @@ namespace psim
         float restitution;
         float damping;
 
+        bool isStatic;
+
     public:
 
         RigidBody(Shape* shape);
 
-        RigidBody(const Vector3f& position, Shape* shape, const float density = 1, const float restitution = DEFAULT_RESTITIUTION, const Color& color = RED, bool drawVectors = true);
+        RigidBody(const Vector3f& position, Shape* shape, const float density = 1, const float restitution = DEFAULT_RESTITIUTION, const Color& color = RED, bool drawVectors = false, bool isStatic = false);
 
         ~RigidBody();
 

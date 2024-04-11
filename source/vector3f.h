@@ -11,6 +11,10 @@ namespace psim {
 
 	public:
 		static const Vector3f ZERO;
+		static const Vector3f X_AXIS;
+		static const Vector3f Y_AXIS;
+		static const Vector3f Z_AXIS;
+
 
 		Vector3f(float x = 0, float y = 0, float z = 0);
 		Vector3f(const Vector3f &other);

@@ -10,7 +10,7 @@ psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0
 {
 };
 
-psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors) 
+psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors, bool isStatic) 
 	: pos(position), shape(shape), linearMomentum(0), density(density), restitution(restitution), color(color), drawVectors(drawVectors)
 {
 	this->id = nextId++;
@@ -21,7 +21,7 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 
 	if (mass == 0) // don't allow zero mass
 	{
-		std::cout << "RigidBody has zero mass" << std::endl;
+		std::cout << "RigidBody has zero mass. Set mass to 1" << std::endl;
 		mass = 1;
 	}
 
@@ -42,6 +42,7 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 	inertiaTensor = shape->computeInertiaTensor() * mass;
 
     this->shape->transform(getTransform());
+	this->isStatic = isStatic;
 }
 
 psim::RigidBody::~RigidBody()

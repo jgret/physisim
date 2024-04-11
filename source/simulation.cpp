@@ -13,7 +13,7 @@ static const int screenHeight = 450;
 
 static const float camSense = 0.1f;
 static const float camSpeed = 10.0f;
-static const float maxTimeStep = 0.001f;
+static const float maxTimeStep = 0.0001f;
 static const psim::Vector3f GRAVITY{ 0, -9.81f, 0 };
 
 static Model model1;
@@ -55,33 +55,32 @@ bool psim::Simulation::init()
 	camera.projection = CAMERA_PERSPECTIVE;
 
 	// add objects
-	static const int object_count = 4;
-	for (int k = 0; k < 3; k++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			for (int i = 0; i < object_count; i++)
-			{
-				float r = 1;
-				psim::RigidBody* body = new psim::RigidBody(
-					Vector3f{j * 2 * r, i * 2 * r + r, k * 2 * r},
-					new psim::Sphere(r)
-				);
-				// body->setRestitution(0);
-				system.addRigidBody(body);
-			}
-		}
-	}
+	//static const int object_count = 3;
+	//for (int k = 0; k < 3; k++)
+	//{
+	//	for (int j = 0; j < 3; j++)
+	//	{
+	//		for (int i = 0; i < object_count; i++)
+	//		{
+	//			float r = 1;
+	//			psim::RigidBody* body = new psim::RigidBody(
+	//				Vector3f{j * 2 * r, i * 2 * r + r, k * 2 * r},
+	//				new psim::Sphere(r)
+	//			);
+	//			// body->setRestitution(0);
+	//			system.addRigidBody(body);
+	//		}
+	//	}
+	//}
 
-	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(1.0f));
-	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1.0f));
+	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(10.0f), 0.05f);
+	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1.0f), 0.05f);
 	psim::RigidBody* c = new psim::RigidBody(Vector3f{ 0, 5, 0 }, new psim::Cuboid());
 
 	system.addRigidBody(a);
 	system.addRigidBody(b);
 	system.addRigidBody(c);
 
-	a->getVel() = Vector3f{ 1, 0, 0 };
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
@@ -327,8 +326,8 @@ void psim::Simulation::update(float fElapsedTime)
 {
 
 	system.clearForces();
+	system.applyGravity();
 	system.checkCollision();
-
 
 	if (trackBody)
 	{
@@ -347,8 +346,6 @@ void psim::Simulation::update(float fElapsedTime)
 		springBody->applyForce(springForce);
 
 	}
-
-	system.applyGravity();
 
 	// TODO: delete this, it only stops balls from fallung through the floor
 	// system.step(fElapsedTime);

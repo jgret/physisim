@@ -8,6 +8,9 @@
 using namespace psim;
 
 const Vector3f Vector3f::ZERO = { 0, 0, 0 };
+const Vector3f Vector3f::X_AXIS = { 1, 0, 0 };
+const Vector3f Vector3f::Y_AXIS = { 0, 1, 0 };
+const Vector3f Vector3f::Z_AXIS = { 0, 0, 1 };
 
 Vector3f::Vector3f(float x, float y, float z) {
 	this->x = x;

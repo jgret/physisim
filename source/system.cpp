@@ -120,8 +120,8 @@ void psim::System::checkCollision()
 
             float damping = body->getDamping();
             Vector3f d = Vector3f{ 0,  y - pos.y, 0 };
-            Vector3f friction = -damping * body->getVelAtPoint(d);
-            //std::cout << friction << std::endl;
+            Vector3f friction = -damping * body->getForce() * Vector3f::Z_AXIS;
+            std::cout << friction << std::endl;
             body->applyForce(friction, d);
         }
     }
@@ -149,17 +149,17 @@ void psim::System::resolveCollision(RigidBody* pObj1, RigidBody* pObj2, Vector3f
     //Vector3f normal2 = -1 * normal;
     //Vector3f normalForce1 = (normal2 * pObj1->getForce()) * normal1;
     //Vector3f normalForce2 = (normal1 * pObj2->getForce()) * normal2;
-    //pObj1->applyForce(normal1);
-    //pObj2->applyForce(normal2);
+    //pObj1->applyForce(normal2);
+    //pObj2->applyForce(normal1);
 
 }
 
 void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f& point, Vector3f& normal)
 {
 
-    const float velThreshold = 0.0;
+    //const float velThreshold = 0.0f;
 
-    float pBefore = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
+    //float pBefore = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
 
     //if (normal * (pObj1->getVel() - pObj2->getVel()) > 0.0f)
     //    return;
@@ -167,42 +167,41 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
     normal = normal.normalize();
 
     // calculate the velocity along the distance vector
-    psim::Vector3f velocityBefore1n = (pObj1->getVel() * normal) * normal;
-    psim::Vector3f velocityBefore2n = (pObj2->getVel() * normal) * normal;
+    float v1bn = (pObj1->getVel() * normal);
+    psim::Vector3f velocityBefore1n = v1bn * normal;
+    float v2bn = (pObj2->getVel() * normal);
+    psim::Vector3f velocityBefore2n = v2bn * normal;
 
     // calculate the normal components to the velocity
     psim::Vector3f normalComponents1 = pObj1->getVel() - velocityBefore1n;
     psim::Vector3f normalComponents2 = pObj2->getVel() - velocityBefore2n;
 
-
-
 	//float v1bn = velocityBefore1n.mag();
 	//float v2bn = velocityBefore2n.mag();
 
-    float v1bn;
-    if (velocityBefore1n * normal > 0)
-    {
-        v1bn = velocityBefore1n.mag();
-    }
-    else
-    {
-        v1bn = -velocityBefore1n.mag();
-    }
+    //if (velocityBefore1n * normal > 0)
+    //{
+    //    v1bn = velocityBefore1n.mag();
+    //}
+    //else
+    //{
+    //    v1bn = -velocityBefore1n.mag();
+    //}
 
-    float v2bn;
-    if (velocityBefore2n * normal > 0)
-    {
-        v2bn = velocityBefore2n.mag();
-    }
-    else
-    {
-        v2bn = -velocityBefore2n.mag();
-    }
 
-    if (std::abs(v1bn) < velThreshold)
-        v1bn = 0;
-    if (std::abs(v2bn) < velThreshold)
-        v2bn = 0;
+    //if (velocityBefore2n * normal > 0)
+    //{
+    //    v2bn = velocityBefore2n.mag();
+    //}
+    //else
+    //{
+    //    v2bn = -velocityBefore2n.mag();
+    //}
+
+    //if (std::abs(v1bn) < velThreshold)
+    //    v1bn = 0;
+    //if (std::abs(v2bn) < velThreshold)
+    //    v2bn = 0;
 	float m1 = pObj1->getMass();
 	float m2 = pObj2->getMass();
     float p1 = m1 * v1bn;
@@ -218,13 +217,13 @@ void psim::System::calculateImpulse(RigidBody* pObj1, RigidBody* pObj2, Vector3f
 	pObj1->getVel() = velocityAfter1n + normalComponents1;
 	pObj2->getVel() = velocityAfter2n + normalComponents2;
 
-    float pAfter = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
+    //float pAfter = (pObj1->getLinearMomentum() + pObj2->getLinearMomentum()).mag();
 
-    float pAbsDiff = std::abs(pBefore - pAfter);
-    if (pAbsDiff > std::numeric_limits<float>::epsilon())
-    {
-        std::cout << "Momentum lost in collsion: " << pBefore << " -> " << pAfter << " (" << pAbsDiff << ")" << std::endl;
-    }
+    //float pAbsDiff = std::abs(pBefore - pAfter);
+    //if (pAbsDiff > std::numeric_limits<float>::epsilon())
+    //{
+    //    std::cout << "Momentum lost in collsion: " << pBefore << " -> " << pAfter << " (" << pAbsDiff << ")" << std::endl;
+    //}
 
 }
 

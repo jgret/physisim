@@ -1,6 +1,7 @@
 #include "matrix3x3.h"
 
-using namespace psim;
+namespace psim
+{
 
 Matrix3x3::Matrix3x3(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
 {
@@ -44,4 +45,6 @@ Matrix3x3 psim::operator*(const float f, const Matrix3x3& m)
     Matrix3x3 ret;
     ret.a = m.a * f;
     return ret;
+}
+
 }

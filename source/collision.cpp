@@ -14,6 +14,8 @@ bool psim::Collision::checkCollision(RigidBody& a, RigidBody& b, Vector3f& conta
 		case SPHERE:
 			return checkShperes(a.getPos(), static_cast<Sphere&>(a.getShape()), b.getPos(), static_cast<Sphere&>(b.getShape()), contactPoint, normal, depth);
 
+		case CUBOID:
+			return false;
 		}
 
 		break;

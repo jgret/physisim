@@ -1,8 +1,10 @@
 #include <cmath>
 #include <iostream>
 #include "rigidbody.h"
+#include "../collision/sphere.h"
 #include "raymath.h"
-#include "collision.h"
+
+//#include "../collision/collision.h"
 
 int psim::RigidBody::nextId = 0;
 
@@ -16,6 +18,8 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 	this->id = nextId++;
 	this->damping = AIR_DAMPING;
 	this->mass = shape->getVolume() * this->density;
+	this->vel = psim::Vector3f::ZERO;
+	this->force = psim::Vector3f::ZERO;
 
 	this->rotation = QuaternionFromMatrix(MatrixRotateXYZ(Vector3f{ PI / 2.0f, 0.0f, 0.0f }));
 
@@ -41,8 +45,10 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 
 	inertiaTensor = shape->computeInertiaTensor() * mass;
 
-    this->shape->transform(getTransform());
+	Matrix transform = getTransform();
+    this->shape->transform(transform);
 	this->isStatic = isStatic;
+
 }
 
 psim::RigidBody::~RigidBody()
@@ -51,8 +57,7 @@ psim::RigidBody::~RigidBody()
 }
 
 void psim::RigidBody::init() {
-	this->acc = psim::Vector3f::ZERO;
-	this->vel = psim::Vector3f::ZERO;
+
 }
 
 float angle;
@@ -86,19 +91,18 @@ void psim::RigidBody::update(float fElapsedTime) {
 void psim::RigidBody::draw() {
 	DrawLine3D(pos, pos + vel, BLUE);
 	DrawLine3D(pos, pos + omega, RED);
-	DrawLine3D(pos, pos + acc, GREEN);
+	DrawLine3D(pos, pos + force / mass, GREEN);
 	this->shape->draw(pos);
 }
 
 void psim::RigidBody::clearForces()
 {
-	acc = Vector3f::ZERO;
 	force = Vector3f::ZERO;
 	torque = Vector3f::ZERO;
 }
 
 void psim::RigidBody::applyForce(const psim::Vector3f &force) {
-	this->acc += force / this->mass;
+	this->force += force;
 }
 
 void psim::RigidBody::applyForce(const psim::Vector3f& force, const psim::Vector3f& p)
@@ -108,7 +112,7 @@ void psim::RigidBody::applyForce(const psim::Vector3f& force, const psim::Vector
 }
 
 void psim::RigidBody::addAcceleration(psim::Vector3f acc) {
-	this->acc += acc;
+	this->force += acc * mass;
 }
 
 float psim::RigidBody::getMass() {
@@ -148,8 +152,8 @@ psim::Vector3f& psim::RigidBody::getVel() {
 	return this->vel;
 }
 
-psim::Vector3f& psim::RigidBody::getAcc() {
-	return this->acc;
+psim::Vector3f psim::RigidBody::getAcc() {
+	return this->force / mass;
 }
 
 const psim::Vector3f& psim::RigidBody::getForce() const
@@ -207,7 +211,7 @@ psim::ShapeType psim::RigidBody::getShapeType() const {
 
 float psim::RigidBody::getTotalEnergy()
 {
-	// 0.5 * mv² + 0.5 * Iw² + mgh
+	// 0.5 * mvï¿½ + 0.5 * Iwï¿½ + mgh
 	return 0.5f * mass * vel.mag2() + 0.5f * inertia * omega.mag2()
 		 + mass * 9.81f * pos.y;
 }
@@ -291,10 +295,10 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 	angularMomentum.z = y[idx++];
 
 	this->linearMomentum = mass * vel;
-	this->force = mass * acc;
 	this->omega = angularMomentum / inertia;
 
-	this->shape->transform(getTransform());
+	Matrix transform = getTransform();
+    this->shape->transform(transform);
 
 	return idx;
 }

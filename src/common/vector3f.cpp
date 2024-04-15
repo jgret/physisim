@@ -1,11 +1,15 @@
-#include "vector3f.h"
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <raymath.h>
+
 #include <sstream>
 
-using namespace psim;
+#include "vector3f.h"
+
+#include "raylib.h"
+#include "raymath.h"
+
+namespace psim {
 
 const Vector3f Vector3f::ZERO = { 0, 0, 0 };
 const Vector3f Vector3f::X_AXIS = { 1, 0, 0 };
@@ -147,7 +151,7 @@ Vector3f Vector3f::normalize() const {
 	
 }
 
-float psim::Vector3f::angle(const Vector3f& other)
+float Vector3f::angle(const Vector3f& other)
 {
 
 	float len1 = this->mag();
@@ -181,7 +185,7 @@ float psim::Vector3f::angle(const Vector3f& other)
 //	}
 //};
 
-std::string psim::Vector3f::toString() const
+std::string Vector3f::toString() const
 {
 	std::ostringstream oss;
 	//oss.imbue(std::locale(oss.getloc(), new sign_padding));
@@ -191,30 +195,23 @@ std::string psim::Vector3f::toString() const
 	return oss.str();
 }
 
-Vector3f psim::operator*(const float f, const Vector3f& v)
-{
-	return Vector3f{
-		v.x * f,
-		v.y * f,
-		v.z * f
-	};
-}
-
 std::ostream& psim::operator<<(std::ostream& out, const Vector3f& v)
 {
 	return out << v.toString();
 }
 
-// extra operators for compatibility with raylib's vector3
-
-Vector3f operator+(const Vector3& a, const Vector3& b)
-{
-	return Vector3f{ a.x + b.x, a.y + b.y, a.z + b.z };
 }
 
-Vector3f operator-(const Vector3& a, const Vector3& b)
+// extra operators for compatibility with raylib's vector3
+
+psim::Vector3f operator+(const Vector3& a, const Vector3& b)
 {
-	return Vector3f{ a.x - b.x, a.y - b.y, a.z - b.z };
+	return psim::Vector3f{ a.x + b.x, a.y + b.y, a.z + b.z };
+}
+
+psim::Vector3f operator-(const Vector3& a, const Vector3& b)
+{
+	return psim::Vector3f{ a.x - b.x, a.y - b.y, a.z - b.z };
 }
 
 void operator+=(Vector3& a, const Vector3& b)
@@ -226,7 +223,7 @@ void operator+=(Vector3& a, const Vector3& b)
 
 psim::Vector3f operator*(const Matrix& m, const Vector3& v)
 {
-	Vector3f ret = { 0 };
+	psim::Vector3f ret = { 0 };
 
 	ret.x = m.m0 * v.x + m.m4 * v.y + m.m8 * v.z;
 	ret.y = m.m1 * v.x + m.m5 * v.y + m.m9 * v.z;

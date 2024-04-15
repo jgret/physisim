@@ -1,5 +1,5 @@
 #include "raylib_extra.h"
-#include "vector3f.h";
+#include "../common/vector3f.h"
 #include "raymath.h"
 
 BoundingBox GetTransformedModelBoundingBox(const Model& model)

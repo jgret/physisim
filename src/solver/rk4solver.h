@@ -16,7 +16,7 @@ namespace psim
          * @param y state vector
          * @return derivative of state vector
         */
-        typedef StateVector(*dydt_func) (float t, StateVector& y);
+        typedef StateVector(*dydt_func) (float t, const StateVector& y);
 
         /**
          * @brief compute the new state of the state array (?)
@@ -26,7 +26,7 @@ namespace psim
          * @param dt
          * @param func
         */
-        void step(StateVector& y, StateVector& y_out, float t0, float dt, dydt_func func);
+        void step(StateVector y, StateVector& y_out, float t0, float dt, dydt_func func);
 
     };
 

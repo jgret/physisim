@@ -2,7 +2,7 @@
 
 #include "system.h"
 #include "raylib.h"
-#include "rk4solver.h"
+#include "../solver/rk4solver.h"
 
 namespace psim {
 

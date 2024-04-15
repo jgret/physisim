@@ -16,11 +16,24 @@ set-executionpolicy remotesigned
 
 ## Build
 
+### VS2022
+
 After running the setup script, open the solution (physisim.sln).
 
 You can build and run the project with Visual Studio 2022.
 
 The executable will be placed into the bin folder.
+
+### MinGW
+
+```bash
+cmake -G "MinGW Makefiles" -D CMAKE_CXX_COMPILER=g++ ..
+mingw32-make
+```
+
+
+
+
 
 ## Controls
 

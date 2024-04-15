@@ -1,10 +1,10 @@
 #pragma once
 
-#include "vector3f.h"
-#include "shape.h"
-#include "physic_constant.h"
-#include "rk4solver.h"
-#include "matrix3x3.h"
+#include "../common/vector3f.h"
+#include "../collision/shape.h"
+#include "../common/physic_constant.h"
+#include "../solver/rk4solver.h"
+#include "../common/matrix3x3.h"
 
 namespace psim
 {
@@ -26,7 +26,6 @@ namespace psim
 
         Vector3f pos;
         Vector3f vel;
-        Vector3f acc;
         Vector3f force;
         Vector3f linearMomentum;
 
@@ -121,7 +120,7 @@ namespace psim
 
         Vector3f& getVel();
 
-        Vector3f& getAcc();
+        Vector3f getAcc();
 
         const Vector3f& getForce() const;
 

@@ -40,7 +40,7 @@ Matrix3x3 psim::Matrix3x3::operator=(const Matrix3x3& m)
     return Matrix3x3(m);
 }
 
-Matrix3x3 psim::operator*(const float f, const Matrix3x3& m)
+Matrix3x3 operator*(const float f, const Matrix3x3& m)
 {
     Matrix3x3 ret;
     ret.a = m.a * f;

@@ -4,7 +4,7 @@
 
 using namespace psim;
 
-void Rk4Solver::step(StateVector& y, StateVector& out, float t0, float dt, dydt_func func)
+void Rk4Solver::step(StateVector y, StateVector& out, float t0, float dt, dydt_func func)
 {
 
     float dt_2 = dt / 2.0f;

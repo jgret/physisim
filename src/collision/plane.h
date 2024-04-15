@@ -1,5 +1,5 @@
 #pragma once
-#include "vector3f.h"
+#include "../common/vector3f.h"
 
 namespace psim {
 
@@ -8,11 +8,7 @@ namespace psim {
 
 	private:
 		Vector3f normal;
-		Vector3f a;
-		Vector3f b;
-	
+		Vector3f p;
 	};
-
-
 
 }

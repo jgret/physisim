@@ -1,6 +1,7 @@
 #pragma once
 
-#include "rigidbody.h"
+#include "shape.h"
+
 
 namespace psim {
 

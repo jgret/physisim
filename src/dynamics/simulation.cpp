@@ -1,11 +1,14 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include "simulation.h"
-#include "utils.h"
-#include "sphere.h"
-#include "cuboid.h"
+
+#include "raylib.h"
 #include "raymath.h"
+
+#include "simulation.h"
+#include "../common/utils.h"
+#include "../collision/sphere.h"
+#include "../collision/cuboid.h"
 
 // ------------- CONSTANTS --------------------------
 static const int screenWidth = 800;
@@ -103,7 +106,7 @@ bool psim::Simulation::run()
 
 	float frameTime = GetFrameTime();
 
-	timestamp timeStart = Clock::now();
+	auto timeStart = Clock::now();
 
 	// mouse input
 	Vector2 mouseDelta = GetMouseDelta();
@@ -119,7 +122,7 @@ bool psim::Simulation::run()
 
 	SetMousePosition(GetScreenWidth() / 2, GetScreenHeight() / 2);
 
-	timestamp timeInput = Clock::now();
+	auto timeInput = Clock::now();
 
 	if (!paused)
 	{
@@ -150,11 +153,11 @@ bool psim::Simulation::run()
 		}
 	}
 
-	timestamp timeUpdate = Clock::now();
+	auto timeUpdate = Clock::now();
 
 	render();
 
-	timestamp timeRender = Clock::now();
+	auto timeRender = Clock::now();
 
 	double timeTaken = getTimeDoubleMs(timeUpdate - timeInput);
 	double timeTakenAvg = nUpdateCount == 0 ? timeTaken : timeTaken / nUpdateCount;

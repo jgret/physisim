@@ -1,7 +1,6 @@
 #pragma once
 
-#include "vector3f.h"
-#include "rigidbody.h"
+#include "shape.h"
 
 namespace psim {
 

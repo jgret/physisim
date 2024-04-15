@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "raylib.h"
+#include "raymath.h"
 #include "physisim.h"
 
 static const int screenWidth = 1280;

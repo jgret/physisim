@@ -1,6 +1,12 @@
-#include "physisim.h"
 #include <cassert>
+
+
+#include "system.h"
+#include "simulation.h"
+#include "../collision/collision.h"
+
 #include "raymath.h"
+
 
 using namespace psim;
 
@@ -121,7 +127,6 @@ void psim::System::checkCollision()
             float damping = body->getDamping();
             Vector3f d = Vector3f{ 0,  y - pos.y, 0 };
             Vector3f friction = -damping * body->getForce() * Vector3f::Z_AXIS;
-            std::cout << friction << std::endl;
             body->applyForce(friction, d);
         }
     }
@@ -303,7 +308,7 @@ std::vector<psim::RigidBody*>& System::getObjects()
     return objects;
 }
 
-StateVector psim::system_dydt(float t, StateVector& y)
+StateVector psim::system_dydt(float t, const StateVector& y)
 {
 
     std::vector<RigidBody*>& objects = Simulation::system.getObjects();

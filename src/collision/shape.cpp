@@ -1,7 +1,7 @@
 #include "shape.h"
 #include "raymath.h"
-#include "vector3f.h"
-#include "raylib_extra.h"
+#include "../common/vector3f.h"
+#include "../raylib/raylib_extra.h"
 
 psim::Shape::Shape(ShapeType type, Color color) : type(type), color(color)
 {

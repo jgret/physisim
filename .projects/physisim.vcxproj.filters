@@ -7,110 +7,89 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{23e222c4-8a47-4f88-9e35-d88cd1980d40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shapes">
-      <UniqueIdentifier>{7b48f920-98ae-4ce2-814b-9dd5d6b2bf74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{6672cad3-23eb-404d-a115-63de9d513cef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shapes">
-      <UniqueIdentifier>{b82adfa7-d30c-479e-9fda-13efa3a6ca34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{a473e3bb-bdac-4810-a08e-904f964214b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Dynamics">
+      <UniqueIdentifier>{8e735b39-2575-4c2b-b7e8-05826262dcb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{6672cad3-23eb-404d-a115-63de9d513cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{b82adfa7-d30c-479e-9fda-13efa3a6ca34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Solver">
+      <UniqueIdentifier>{00e8841a-98fd-4811-80cf-2200b69dbf67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Dynamics">
+      <UniqueIdentifier>{3db8ab81-df97-45d5-aa15-82cdc8ce1f69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{23e222c4-8a47-4f88-9e35-d88cd1980d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Solver">
+      <UniqueIdentifier>{47b1c3c9-c86e-4593-9e69-7ed60b8e54f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{7b48f920-98ae-4ce2-814b-9dd5d6b2bf74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Raylib">
+      <UniqueIdentifier>{5cdc3161-3384-4539-8f9f-9e918d1c4427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Raylib">
+      <UniqueIdentifier>{3f96b1a3-34ed-4637-ad5e-bcb389a80f77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\cuboid.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\plane.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\shape.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\sphere.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\vector3f.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\collision.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\rigidbody.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\system.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\simulation.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\raylib_extra.cpp" />
-    <ClCompile Include="..\source\matrix3x3.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\rk4solver.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\rigidbody.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\vector3f.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\cuboid.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\sphere.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\plane.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\collision.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\system.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\physisim.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\simulation.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\physic_constant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\psim_core.h">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="..\src\common\matrix3x3.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\raylib_extra.h" />
-    <ClInclude Include="..\source\matrix3x3.h">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="..\src\common\physic_constant.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\rk4solver.h">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="..\src\common\psim_core.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\shape.h">
-      <Filter>Header Files\Shapes</Filter>
+    <ClInclude Include="..\src\common\utils.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\vector3f.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dynamics\rigidbody.h">
+      <Filter>Header Files\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dynamics\simulation.h">
+      <Filter>Header Files\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dynamics\system.h">
+      <Filter>Header Files\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\collision\collision.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\collision\cuboid.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\collision\plane.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\collision\shape.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\collision\sphere.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\solver\rk4solver.h">
+      <Filter>Header Files\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\physisim.h" />
+    <ClInclude Include="..\src\raylib\raylib_extra.h">
+      <Filter>Header Files\Raylib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,5 +101,46 @@
     <ResourceCompile Include="physisim.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\collision\collision.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\collision\cuboid.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\collision\plane.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\collision\shape.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\collision\sphere.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\matrix3x3.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\vector3f.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dynamics\rigidbody.cpp">
+      <Filter>Source Files\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dynamics\simulation.cpp">
+      <Filter>Source Files\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dynamics\system.cpp">
+      <Filter>Source Files\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\solver\rk4solver.cpp">
+      <Filter>Source Files\Solver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\raylib\raylib_extra.cpp">
+      <Filter>Source Files\Raylib</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

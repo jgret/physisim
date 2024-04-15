@@ -1,9 +1,9 @@
 #pragma once
 
-#include "rigidbody.h"
-#include "vector3f.h"
 #include "sphere.h"
 #include "cuboid.h"
+#include "../dynamics/rigidbody.h"
+#include "../common/vector3f.h"
 
 namespace psim {
 

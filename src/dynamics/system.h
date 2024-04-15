@@ -2,11 +2,11 @@
 
 #include <vector>
 #include "rigidbody.h"
-#include "rk4solver.h"
+#include "../solver/rk4solver.h"
 
 namespace psim {
 
-	StateVector system_dydt(float t, StateVector& y);
+	StateVector system_dydt(float t, const StateVector& y);
 
 	class System
 	{

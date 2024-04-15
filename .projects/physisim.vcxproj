@@ -154,6 +154,7 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -173,6 +174,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -191,6 +193,7 @@
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -274,37 +277,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\collision.cpp" />
-    <ClCompile Include="..\source\cuboid.cpp" />
-    <ClCompile Include="..\source\main.cpp" />
-    <ClCompile Include="..\source\matrix3x3.cpp" />
-    <ClCompile Include="..\source\plane.cpp" />
-    <ClCompile Include="..\source\raylib_extra.cpp" />
-    <ClCompile Include="..\source\rigidbody.cpp" />
-    <ClCompile Include="..\source\rk4solver.cpp" />
-    <ClCompile Include="..\source\shape.cpp" />
-    <ClCompile Include="..\source\simulation.cpp" />
-    <ClCompile Include="..\source\sphere.cpp" />
-    <ClCompile Include="..\source\system.cpp" />
-    <ClCompile Include="..\source\vector3f.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\collision.h" />
-    <ClInclude Include="..\source\cuboid.h" />
-    <ClInclude Include="..\source\matrix3x3.h" />
-    <ClInclude Include="..\source\physic_constant.h" />
-    <ClInclude Include="..\source\physisim.h" />
-    <ClInclude Include="..\source\plane.h" />
-    <ClInclude Include="..\source\psim_core.h" />
-    <ClInclude Include="..\source\raylib_extra.h" />
-    <ClInclude Include="..\source\rigidbody.h" />
-    <ClInclude Include="..\source\rk4solver.h" />
-    <ClInclude Include="..\source\shape.h" />
-    <ClInclude Include="..\source\simulation.h" />
-    <ClInclude Include="..\source\sphere.h" />
-    <ClInclude Include="..\source\system.h" />
-    <ClInclude Include="..\source\utils.h" />
-    <ClInclude Include="..\source\vector3f.h" />
+    <ClInclude Include="..\src\collision\collision.h" />
+    <ClInclude Include="..\src\collision\cuboid.h" />
+    <ClInclude Include="..\src\collision\plane.h" />
+    <ClInclude Include="..\src\collision\shape.h" />
+    <ClInclude Include="..\src\collision\sphere.h" />
+    <ClInclude Include="..\src\common\matrix3x3.h" />
+    <ClInclude Include="..\src\common\physic_constant.h" />
+    <ClInclude Include="..\src\common\psim_core.h" />
+    <ClInclude Include="..\src\common\utils.h" />
+    <ClInclude Include="..\src\common\vector3f.h" />
+    <ClInclude Include="..\src\dynamics\rigidbody.h" />
+    <ClInclude Include="..\src\dynamics\simulation.h" />
+    <ClInclude Include="..\src\dynamics\system.h" />
+    <ClInclude Include="..\src\physisim.h" />
+    <ClInclude Include="..\src\raylib\raylib_extra.h" />
+    <ClInclude Include="..\src\solver\rk4solver.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +300,21 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\collision\collision.cpp" />
+    <ClCompile Include="..\src\collision\cuboid.cpp" />
+    <ClCompile Include="..\src\collision\plane.cpp" />
+    <ClCompile Include="..\src\collision\shape.cpp" />
+    <ClCompile Include="..\src\collision\sphere.cpp" />
+    <ClCompile Include="..\src\common\matrix3x3.cpp" />
+    <ClCompile Include="..\src\common\vector3f.cpp" />
+    <ClCompile Include="..\src\dynamics\rigidbody.cpp" />
+    <ClCompile Include="..\src\dynamics\simulation.cpp" />
+    <ClCompile Include="..\src\dynamics\system.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\raylib\raylib_extra.cpp" />
+    <ClCompile Include="..\src\solver\rk4solver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

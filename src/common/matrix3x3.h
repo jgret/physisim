@@ -1,7 +1,7 @@
 #pragma once
 
 #include <valarray>
-#include <vector3f.h>
+#include "vector3f.h"
 
 namespace psim
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "vector3f.h"
 #include "raylib.h"
-#include "matrix3x3.h"
+#include "../common/vector3f.h"
+#include "../common/matrix3x3.h"
 
 namespace psim {
 

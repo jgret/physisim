@@ -195,7 +195,7 @@ std::string Vector3f::toString() const
 	return oss.str();
 }
 
-std::ostream& psim::operator<<(std::ostream& out, const Vector3f& v)
+std::ostream& operator<<(std::ostream& out, const Vector3f& v)
 {
 	return out << v.toString();
 }

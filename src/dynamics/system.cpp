@@ -318,7 +318,7 @@ StateVector psim::system_dydt(float t, const StateVector& y)
     {
         int offset = idx * RIGIDBODY_SIZE_IN_STATE_VECTOR;
         RigidBody& body = *objects[idx];
-        Vector3f& acc = body.getAcc();
+        Vector3f acc = body.getAcc();
         const Vector3f& torque = body.getTorque();
         float inertia = body.getInertia();
 

@@ -418,7 +418,7 @@ void psim::Simulation::render()
 
 		Vector3f& pos = infoBody->getPos();
 		Vector3f& vel = infoBody->getVel();
-		Vector3f& acc = infoBody->getAcc();
+		Vector3f acc = infoBody->getAcc();
 		float mass = infoBody->getMass();
 
 		const char* text = TextFormat("RigidBody\npos { x: %2.2f y: %2.2f z: %2.2f }\nvel { x: %2.2f y: %2.2f z: %2.2f }\nacc { x: %2.2f y: %2.2f z: %2.2f }\nmass: %2.2f\n",

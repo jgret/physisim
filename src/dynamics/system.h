@@ -3,16 +3,18 @@
 #include <vector>
 #include "rigidbody.h"
 #include "../solver/rk4solver.h"
+#include "force_object.h"
 
 namespace psim {
 
-	StateVector system_dydt(float t, const StateVector& y);
+	
 
 	class System
 	{
 
 	private:
 		std::vector<psim::RigidBody*> objects;
+		std::vector<ForceObject*> forceObjs;
 
 	public:
 
@@ -20,6 +22,7 @@ namespace psim {
 		~System();
 
 		void addRigidBody(psim::RigidBody* b);
+		void addForceObject(ForceObject* force);
 		psim::RigidBody* removeRigidBody(psim::RigidBody* b);
 		psim::RigidBody* removeRigidBodyById(int id);
 		
@@ -42,6 +45,7 @@ namespace psim {
 
 		std::vector<psim::RigidBody*>& getObjects();
 
+		StateVector system_dydt(float t, const StateVector& y);
 
 	};
 

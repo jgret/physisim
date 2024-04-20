@@ -91,6 +91,16 @@
     <ClInclude Include="..\src\raylib\raylib_extra.h">
       <Filter>Header Files\Raylib</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\solver\odesolver.h">
+      <Filter>Header Files\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\solver\eulersolver.h">
+      <Filter>Header Files\Solver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dynamics\force_object.h">
+      <Filter>Header Files\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dynamics\spring_force.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\icon.ico">
@@ -142,5 +152,15 @@
     <ClCompile Include="..\src\raylib\raylib_extra.cpp">
       <Filter>Source Files\Raylib</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\solver\odesolver.cpp">
+      <Filter>Source Files\Solver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\solver\eulersolver.cpp">
+      <Filter>Source Files\Solver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dynamics\force_object.cpp">
+      <Filter>Source Files\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dynamics\spring_force.cpp" />
   </ItemGroup>
 </Project>

@@ -25,6 +25,11 @@ void System::addRigidBody(psim::RigidBody* b)
     objects.push_back(b);
 }
 
+void psim::System::addForceObject(ForceObject* force)
+{
+    this->forceObjs.push_back(force);
+}
+
 psim::RigidBody* System::removeRigidBody(psim::RigidBody* b)
 {
     return removeRigidBodyById(b->getId());
@@ -80,6 +85,12 @@ void psim::System::applyGravity()
     {
         o->addAcceleration(GRAVITY);
     }
+
+    for (ForceObject* force : forceObjs)
+    {
+        force->applyForce();
+    }
+
 }
 
 void psim::System::checkCollision()
@@ -308,10 +319,10 @@ std::vector<psim::RigidBody*>& System::getObjects()
     return objects;
 }
 
-StateVector psim::system_dydt(float t, const StateVector& y)
+StateVector psim::System::system_dydt(float t, const StateVector& y)
 {
 
-    std::vector<RigidBody*>& objects = Simulation::system.getObjects();
+    std::vector<RigidBody*>& objects = this->getObjects();
     StateVector ydot(y.size());
 
     for (int idx = 0; idx < objects.size(); idx++)

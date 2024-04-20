@@ -15,7 +15,7 @@ namespace psim {
 	private:
 
 		Camera3D camera;
-		Rk4Solver solver;
+		ODESolver* solver;
 
 		bool paused;
 		int nUpdateCount;

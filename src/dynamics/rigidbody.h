@@ -11,23 +11,13 @@ namespace psim
 
 #define RIGIDBODY_SIZE_IN_STATE_VECTOR 16
 
-    class RigidBody
+    class RigidBodyData
     {
 
-    private:
-        static int nextId;
-
-        int id;
-        bool drawVectors;
-        Shape* shape;
-
-    protected:
-        Color color;
-
+    public:
         Vector3f pos;
         Vector3f vel;
         Vector3f force;
-        Vector3f linearMomentum;
 
         Quaternion rotation;
         Vector3f omega;
@@ -41,13 +31,31 @@ namespace psim
         float restitution;
         float damping;
 
+    };
+
+    class RigidBody
+    {
+
+    private:
+        static int nextId;
+
+        int id;
+        bool drawVectors;
+        Shape* shape;
+
+    protected:
+        Color color;
+
         bool isStatic;
+        RigidBodyData data;
 
     public:
 
         RigidBody(Shape* shape);
 
         RigidBody(const Vector3f& position, Shape* shape, const float density = 1, const float restitution = DEFAULT_RESTITIUTION, const Color& color = RED, bool drawVectors = false, bool isStatic = false);
+        
+        RigidBody(RigidBodyData data);
 
         ~RigidBody();
 
@@ -126,7 +134,7 @@ namespace psim
 
         const Vector3f& getTorque() const;
 
-        const Vector3f& getLinearMomentum() const;
+        Vector3f getLinearMomentum() const;
 
         const Vector3f& getAngularMomentum() const;
 

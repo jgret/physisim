@@ -287,11 +287,15 @@
     <ClInclude Include="..\src\common\psim_core.h" />
     <ClInclude Include="..\src\common\utils.h" />
     <ClInclude Include="..\src\common\vector3f.h" />
+    <ClInclude Include="..\src\dynamics\force_object.h" />
     <ClInclude Include="..\src\dynamics\rigidbody.h" />
     <ClInclude Include="..\src\dynamics\simulation.h" />
+    <ClInclude Include="..\src\dynamics\spring_force.h" />
     <ClInclude Include="..\src\dynamics\system.h" />
     <ClInclude Include="..\src\physisim.h" />
     <ClInclude Include="..\src\raylib\raylib_extra.h" />
+    <ClInclude Include="..\src\solver\eulersolver.h" />
+    <ClInclude Include="..\src\solver\odesolver.h" />
     <ClInclude Include="..\src\solver\rk4solver.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -309,11 +313,15 @@
     <ClCompile Include="..\src\collision\sphere.cpp" />
     <ClCompile Include="..\src\common\matrix3x3.cpp" />
     <ClCompile Include="..\src\common\vector3f.cpp" />
+    <ClCompile Include="..\src\dynamics\force_object.cpp" />
     <ClCompile Include="..\src\dynamics\rigidbody.cpp" />
     <ClCompile Include="..\src\dynamics\simulation.cpp" />
+    <ClCompile Include="..\src\dynamics\spring_force.cpp" />
     <ClCompile Include="..\src\dynamics\system.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\raylib\raylib_extra.cpp" />
+    <ClCompile Include="..\src\solver\eulersolver.cpp" />
+    <ClCompile Include="..\src\solver\odesolver.cpp" />
     <ClCompile Include="..\src\solver\rk4solver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

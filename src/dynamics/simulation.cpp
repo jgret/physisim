@@ -6,9 +6,11 @@
 #include "raymath.h"
 
 #include "simulation.h"
+#include "../solver/eulersolver.h"
 #include "../common/utils.h"
 #include "../collision/sphere.h"
 #include "../collision/cuboid.h"
+#include "spring_force.h"
 
 // ------------- CONSTANTS --------------------------
 static const int screenWidth = 800;
@@ -38,10 +40,21 @@ psim::Simulation::Simulation()
 	nRequiredUpdateCount = 0;
 	system.~System();
 	system = std::move(System());
+
+	using std::placeholders::_1;
+	using std::placeholders::_2;
+	auto func = std::bind(&System::system_dydt, &system, _1, _2);
+	solver = new Rk4Solver(func);
+	//solver = new EulerSolver(func);
 }
 
 psim::Simulation::~Simulation()
 {
+	if (solver)
+	{
+		delete solver;
+		solver = nullptr;
+	}
 }
 
 bool psim::Simulation::init()
@@ -78,12 +91,22 @@ bool psim::Simulation::init()
 
 	psim::RigidBody* a = new psim::RigidBody(Vector3f{ -10, 2, 0}, new psim::Sphere(10.0f), 0.05f);
 	psim::RigidBody* b = new psim::RigidBody(Vector3f{ -10, 20, 0 }, new psim::Sphere(1.0f), 0.05f);
-	psim::RigidBody* c = new psim::RigidBody(Vector3f{ 0, 5, 0 }, new psim::Cuboid());
+	psim::RigidBody* c = new psim::RigidBody(Vector3f{ 0, 5, 0 }, new psim::Cuboid(), 0.05f);
+
+	psim::RigidBody* sa = new psim::RigidBody(Vector3f{ 10, 1, 0 }, new psim::Sphere(1.0f), 0.05f);
+
+	psim::RigidBody* sb = new psim::RigidBody(Vector3f{ 11, 1, 0 }, new psim::Sphere(1.0f), 0.05f);
+
+
+	SpringForce* spring1 = new SpringForce(*sa, *sb, 2.5f, 5.0f, 0.5f);
 
 	system.addRigidBody(a);
 	system.addRigidBody(b);
 	system.addRigidBody(c);
 
+	system.addRigidBody(sa);
+	system.addRigidBody(sb);
+	system.addForceObject(spring1);
 
 	//psim::RigidBody* a = new psim::RigidBody(new psim::Sphere(psim::Vector3f{1, 1, 0}, 1));
 	//psim::RigidBody* b = new psim::RigidBody(new psim::Sphere(psim::Vector3f{0, 10, 0}, 1));
@@ -357,7 +380,7 @@ void psim::Simulation::update(float fElapsedTime)
 	StateVector in = system.getStateVector();
 	StateVector out;
 	float time = static_cast<float>(GetTime());
-	solver.step(in, out, time, fElapsedTime, system_dydt);
+	solver->step(in, out, time, fElapsedTime);
 	system.update(out);
 
 }

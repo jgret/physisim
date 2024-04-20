@@ -13,20 +13,24 @@ psim::RigidBody::RigidBody(Shape* shape) : RigidBody(Vector3f::ZERO, shape, 1, 0
 };
 
 psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float density, const float restitution, const Color& color, bool drawVectors, bool isStatic) 
-	: pos(position), shape(shape), linearMomentum(0), density(density), restitution(restitution), color(color), drawVectors(drawVectors)
 {
-	this->id = nextId++;
-	this->damping = AIR_DAMPING;
-	this->mass = shape->getVolume() * this->density;
-	this->vel = psim::Vector3f::ZERO;
-	this->force = psim::Vector3f::ZERO;
 
-	this->rotation = QuaternionFromMatrix(MatrixRotateXYZ(Vector3f{ PI / 2.0f, 0.0f, 0.0f }));
+	this->shape = shape;
 
-	if (mass == 0) // don't allow zero mass
+	data.damping = AIR_DAMPING;
+	data.density = density;
+	data.restitution = restitution;
+	data.pos = position;
+	data.mass = shape->getVolume() * data.density;
+	data.vel = psim::Vector3f::ZERO;
+	data.force = psim::Vector3f::ZERO;
+
+	data.rotation = QuaternionFromMatrix(MatrixRotateXYZ(Vector3f{ PI / 2.0f, 0.0f, 0.0f }));
+
+	if (data.mass == 0) // don't allow zero mass
 	{
 		std::cout << "RigidBody has zero mass. Set mass to 1" << std::endl;
-		mass = 1;
+		data.mass = 1;
 	}
 
 	if (shape->getType() == SPHERE)
@@ -35,19 +39,24 @@ psim::RigidBody::RigidBody(const Vector3f& position, Shape* shape, const float d
 		Sphere& s = static_cast<Sphere&>(*shape);
 		float r = s.getRadius();
 
-		inertia = 2.0f / 5.0f * mass * r * r;
+		data.inertia = 2.0f / 5.0f * data.mass * r * r;
 
     }
     else
     {
-        inertia = 1;
+        data.inertia = 1;
     }
 
-	inertiaTensor = shape->computeInertiaTensor() * mass;
+	data.inertiaTensor = shape->computeInertiaTensor() * data.mass;
 
-	Matrix transform = getTransform();
-    this->shape->transform(transform);
+	this->drawVectors = true;
 	this->isStatic = isStatic;
+}
+
+psim::RigidBody::RigidBody(RigidBodyData data)
+{
+	this->id = nextId++;
+	this->data = data;
 
 }
 
@@ -74,7 +83,7 @@ void psim::RigidBody::update(float fElapsedTime) {
 	//	if (y - radius <= 0) {
 	//	
 	//		this->pos.y = radius;
-	//		this->vel.y *= -this->restitution;
+	//		this->data.vel.y *= -this->restitution;
 
 	//	}
 
@@ -89,54 +98,56 @@ void psim::RigidBody::update(float fElapsedTime) {
 }
 
 void psim::RigidBody::draw() {
-	DrawLine3D(pos, pos + vel, BLUE);
-	DrawLine3D(pos, pos + omega, RED);
-	DrawLine3D(pos, pos + force / mass, GREEN);
-	this->shape->draw(pos);
+	Matrix transform = getTransform();
+	this->shape->transform(transform);
+	DrawLine3D(data.pos, data.pos + data.vel, BLUE);
+	DrawLine3D(data.pos, data.pos + data.omega, RED);
+	DrawLine3D(data.pos, data.pos + data.force / data.mass, GREEN);
+	this->shape->draw(data.pos);
 }
 
 void psim::RigidBody::clearForces()
 {
-	force = Vector3f::ZERO;
-	torque = Vector3f::ZERO;
+	data.force = Vector3f::ZERO;
+	data.torque = Vector3f::ZERO;
 }
 
 void psim::RigidBody::applyForce(const psim::Vector3f &force) {
-	this->force += force;
+	this->data.force += force;
 }
 
 void psim::RigidBody::applyForce(const psim::Vector3f& force, const psim::Vector3f& p)
 {
 	applyForce(force);
-	this->torque += p.cross(force);
+	this->data.torque += p.cross(force);
 }
 
 void psim::RigidBody::addAcceleration(psim::Vector3f acc) {
-	this->force += acc * mass;
+	this->data.force += acc * data.mass;
 }
 
 float psim::RigidBody::getMass() {
-	return this->mass;
+	return this->data.mass;
 }
 
 float psim::RigidBody::getRestitution()
 {
-	return this->restitution;
+	return this->data.restitution;
 }
 
 float psim::RigidBody::getDamping()
 {
-	return this->damping;
+	return this->data.damping;
 }
 
 void psim::RigidBody::setDamping(float d)
 {
-	this->damping = d;
+	this->data.damping = d;
 }
 
 void psim::RigidBody::setRestitution(const float r)
 {
-	this->restitution = r;
+	this->data.restitution = r;
 }
 
 psim::Shape &psim::RigidBody::getShape() const
@@ -145,53 +156,53 @@ psim::Shape &psim::RigidBody::getShape() const
 }
 
 psim::Vector3f& psim::RigidBody::getPos() {
-	return this->pos;
+	return this->data.pos;
 }
 
 psim::Vector3f& psim::RigidBody::getVel() {
-	return this->vel;
+	return this->data.vel;
 }
 
 psim::Vector3f psim::RigidBody::getAcc() {
-	return this->force / mass;
+	return this->data.force / data.mass;
 }
 
 const psim::Vector3f& psim::RigidBody::getForce() const
 {
-	return this->force;
+	return this->data.force;
 }
 
 const psim::Vector3f& psim::RigidBody::getTorque() const
 {
-	return this->torque;
+	return this->data.torque;
 }
 
-const psim::Vector3f& psim::RigidBody::getLinearMomentum() const
+psim::Vector3f psim::RigidBody::getLinearMomentum() const
 {
-	return this->linearMomentum;
+	return data.mass * data.vel;
 }
 
 const psim::Vector3f& psim::RigidBody::getAngularMomentum() const
 {
-	return this->angularMomentum;
+	return this->data.angularMomentum;
 }
 
 const float psim::RigidBody::getInertia() const
 {
-	return inertia;
+	return data.inertia;
 }
 
 Matrix psim::RigidBody::getTransform() const
 {
 	Matrix matScale = MatrixScale(1.0f, 1.0f, 1.0f);
-	Matrix rotationMatrix = QuaternionToMatrix(rotation);
-	Matrix translationMatrix = MatrixTranslate(pos.x, pos.y, pos.z);
+	Matrix rotationMatrix = QuaternionToMatrix(data.rotation);
+	Matrix translationMatrix = MatrixTranslate(data.pos.x, data.pos.y, data.pos.z);
 	return MatrixMultiply(MatrixMultiply(matScale, rotationMatrix), translationMatrix);
 }
 
 psim::Vector3f psim::RigidBody::getVelAtPoint(const Vector3f& p) const
 {
-	return (vel + omega.cross(p));
+	return (data.vel + data.omega.cross(p));
 }
 
 BoundingBox psim::RigidBody::getAABB() const
@@ -199,8 +210,8 @@ BoundingBox psim::RigidBody::getAABB() const
 	BoundingBox box = shape->getAABB();
 
 	// translate the position of the box
-	box.min += pos;
-	box.max += pos;
+	box.min += data.pos;
+	box.max += data.pos;
 
 	return box;
 
@@ -211,9 +222,9 @@ psim::ShapeType psim::RigidBody::getShapeType() const {
 
 float psim::RigidBody::getTotalEnergy()
 {
-	// 0.5 * mv� + 0.5 * Iw� + mgh
-	return 0.5f * mass * vel.mag2() + 0.5f * inertia * omega.mag2()
-		 + mass * 9.81f * pos.y;
+	// 0.5 * mv^2 + 0.5 * Iw^2 + mgh
+	return 0.5f * data.mass * data.vel.mag2() + 0.5f * data.inertia * data.omega.mag2()
+		 + data.mass * 9.81f * data.pos.y;
 }
 
 void psim::RigidBody::showVectors(bool b) {
@@ -237,30 +248,30 @@ int psim::RigidBody::getId()
 int psim::RigidBody::appendToStateVector(StateVector& y, int idx)
 {
 	// position
-	y[idx++] = pos.x;
-	y[idx++] = pos.y;
-	y[idx++] = pos.z;
+	y[idx++] = data.pos.x;
+	y[idx++] = data.pos.y;
+	y[idx++] = data.pos.z;
 
 	// velocity
-	y[idx++] = vel.x;
-	y[idx++] = vel.y;
-	y[idx++] = vel.z;
+	y[idx++] = data.vel.x;
+	y[idx++] = data.vel.y;
+	y[idx++] = data.vel.z;
 
 	// rotation
-	y[idx++] = rotation.x;
-	y[idx++] = rotation.y;
-	y[idx++] = rotation.z;
-	y[idx++] = rotation.w;
+	y[idx++] = data.rotation.x;
+	y[idx++] = data.rotation.y;
+	y[idx++] = data.rotation.z;
+	y[idx++] = data.rotation.w;
 
 	// omega
-	y[idx++] = omega.x;
-	y[idx++] = omega.y;
-	y[idx++] = omega.z;
+	y[idx++] = data.omega.x;
+	y[idx++] = data.omega.y;
+	y[idx++] = data.omega.z;
 
 	// angular momentum
-	y[idx++] = angularMomentum.x;
-	y[idx++] = angularMomentum.y;
-	y[idx++] = angularMomentum.z;
+	y[idx++] = data.angularMomentum.x;
+	y[idx++] = data.angularMomentum.y;
+	y[idx++] = data.angularMomentum.z;
 
 	return idx;
 }
@@ -269,36 +280,35 @@ int psim::RigidBody::updateFromStateVector(const StateVector& y, int idx)
 {
 
 	// position
-	pos.x = y[idx++];
-	pos.y = y[idx++];
-	pos.z = y[idx++];
+	data.pos.x = y[idx++];
+	data.pos.y = y[idx++];
+	data.pos.z = y[idx++];
 
 	// velocity
-	vel.x = y[idx++];
-	vel.y = y[idx++];
-	vel.z = y[idx++];
+	data.vel.x = y[idx++];
+	data.vel.y = y[idx++];
+	data.vel.z = y[idx++];
 
 	// rotation
-	rotation.x = y[idx++];
-	rotation.y = y[idx++];
-	rotation.z = y[idx++];
-	rotation.w = y[idx++];
+	data.rotation.x = y[idx++];
+	data.rotation.y = y[idx++];
+	data.rotation.z = y[idx++];
+	data.rotation.w = y[idx++];
 
 	// omega
-	omega.x = y[idx++];
-	omega.y = y[idx++];
-	omega.z = y[idx++];
+	data.omega.x = y[idx++];
+	data.omega.y = y[idx++];
+	data.omega.z = y[idx++];
 
 	// angular momentum
-	angularMomentum.x = y[idx++];
-	angularMomentum.y = y[idx++];
-	angularMomentum.z = y[idx++];
+	data.angularMomentum.x = y[idx++];
+	data.angularMomentum.y = y[idx++];
+	data.angularMomentum.z = y[idx++];
 
-	this->linearMomentum = mass * vel;
-	this->omega = angularMomentum / inertia;
+	this->data.omega = data.angularMomentum / data.inertia;
 
-	Matrix transform = getTransform();
-    this->shape->transform(transform);
+	// Matrix transform = getTransform();
+	// this->shape->transform(transform);
 
 	return idx;
 }

@@ -7,8 +7,8 @@ using namespace psim;
 
 psim::Sphere::Sphere(float r) : Shape(ShapeType::SPHERE, BLUE), r(r)
 {
-	const int rings = 7;
-	const int slices = 14;
+	const int rings = 14;
+	const int slices = rings * 2;
 	Mesh mesh = GenMeshSphere(r, rings, slices);
 	this->model = LoadModelFromMesh(mesh);
 }
